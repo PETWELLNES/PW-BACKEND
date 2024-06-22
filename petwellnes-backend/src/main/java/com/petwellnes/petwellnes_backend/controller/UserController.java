@@ -36,13 +36,21 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no encontrado.");
         } catch (AuthenticationException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error en la autenticación.");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno del servidor");
         }
     }
 
     @PostMapping("/register")
     @Transactional
-    public ResponseEntity<TokenResponse> addUser (@RequestBody @Valid UserRegisterDTO data) {
-        return ResponseEntity.ok(userService.addUser(data));
+    public ResponseEntity<?> addUser (@RequestBody @Valid UserRegisterDTO data) {
+        try {
+            TokenResponse tokenResponse = userService.addUser(data);
+            return ResponseEntity.ok(tokenResponse);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al registrar el usuario.");
+        }
     }
 }
-

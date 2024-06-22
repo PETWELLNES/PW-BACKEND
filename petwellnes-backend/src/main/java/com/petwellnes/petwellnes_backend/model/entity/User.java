@@ -31,7 +31,7 @@ public class User implements UserDetails {
     private LocalDate birthday;
     private LocalDate registerday;
     private String country;
-    private boolean enabled;
+    private boolean enabled = true;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

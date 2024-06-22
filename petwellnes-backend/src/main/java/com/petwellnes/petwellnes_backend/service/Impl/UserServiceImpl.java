@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,27 +29,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public TokenResponse login(LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()
-                )
-        );
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()
+                    )
+            );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        User user = userRepository.findByUsername(loginRequest.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("El siguiente username es incorrecto o no existe :" + loginRequest.getUsername()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            User user = userRepository.findByUsername(loginRequest.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException("El siguiente username es incorrecto o no existe :" + loginRequest.getUsername()));
 
-        String token = jwtService.getToken(user, user);
-        return TokenResponse.builder()
-                .token(token)
-                .build();
+            String token = jwtService.getToken(userDetails, user);
+            return TokenResponse.builder()
+                    .token(token)
+                    .build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw ex;
+        }
     }
 
     @Override
+    @Transactional
     public TokenResponse addUser(UserRegisterDTO data) {
         User user = new User();
         user.setUsername(data.username());
         user.setEmail(data.email());
         user.setPassword(passwordEncoder.encode(data.password()));
+        user.setEnabled(true);
 
         userRepository.save(user);
 
