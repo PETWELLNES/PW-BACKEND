@@ -1,4 +1,4 @@
 package com.petwellnes.petwellnes_backend.model.entity;
 
-public class Publish {
+public class Grupo {
 }

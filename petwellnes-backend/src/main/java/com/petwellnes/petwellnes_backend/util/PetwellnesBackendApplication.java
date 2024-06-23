@@ -1,4 +1,4 @@
-package com.petwellnes.petwellnes_backend;
+package com.petwellnes.petwellnes_backend.util;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
