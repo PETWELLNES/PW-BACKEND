@@ -12,9 +12,10 @@ public record UserDetailsDTO(
         String phone,
         String work,
         LocalDate birthday,
-        String country
+        String country,
+        LocalDate registerday
 ) {
     public UserDetailsDTO(User user) {
-        this(user.getUsername(), user.getName(), user.getLastname(), user.getEmail(), user.getPhone(), user.getWork(), user.getBirthday(), user.getCountry());
+        this(user.getUsername(), user.getName(), user.getLastname(), user.getEmail(), user.getPhone(), user.getWork(), user.getBirthday(), user.getCountry(), user.getRegisterday());
     }
 }

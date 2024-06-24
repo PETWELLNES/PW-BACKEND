@@ -4,7 +4,9 @@ import com.petwellnes.petwellnes_backend.infra.config.security.LoginRequest;
 import com.petwellnes.petwellnes_backend.infra.config.security.TokenResponse;
 import com.petwellnes.petwellnes_backend.infra.exception.UsernameNotFoundException;
 import com.petwellnes.petwellnes_backend.infra.repository.UserRepository;
+import com.petwellnes.petwellnes_backend.model.dto.userDto.UserDetailsDTO;
 import com.petwellnes.petwellnes_backend.model.dto.userDto.UserRegisterDTO;
+import com.petwellnes.petwellnes_backend.model.dto.userDto.UserUpdateDTO;
 import com.petwellnes.petwellnes_backend.model.entity.User;
 import com.petwellnes.petwellnes_backend.infra.config.security.JwtService;
 import com.petwellnes.petwellnes_backend.service.UserService;
@@ -18,6 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @RequiredArgsConstructor
 @Service
@@ -42,6 +46,7 @@ public class UserServiceImpl implements UserService {
             String token = jwtService.getToken(userDetails, user);
             return TokenResponse.builder()
                     .token(token)
+                    .userId(user.getUserId())
                     .build();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -57,12 +62,14 @@ public class UserServiceImpl implements UserService {
         user.setEmail(data.email());
         user.setPassword(passwordEncoder.encode(data.password()));
         user.setEnabled(true);
+        user.setRegisterday(LocalDate.now());
 
         userRepository.save(user);
 
         String token = jwtService.getToken(user, user);
         return TokenResponse.builder()
                 .token(token)
+                .userId(user.getUserId())
                 .build();
     }
 
@@ -77,6 +84,37 @@ public class UserServiceImpl implements UserService {
         String currentUserName = auth.getName();
         return userRepository.findByUsername(currentUserName)
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+    }
+
+    @Override
+    public UserDetailsDTO getUserDetails(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+        return new UserDetailsDTO(user);
+    }
+
+    @Override
+    @Transactional
+    public UserDetailsDTO updateUserDetails(Long userId, UserUpdateDTO userUpdateDTO) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+        user.setUsername(userUpdateDTO.username());
+        user.setEmail(userUpdateDTO.email());
+        user.setName(userUpdateDTO.name());
+        user.setLastname(userUpdateDTO.lastname());
+        user.setPhone(userUpdateDTO.phone());
+        user.setWork(userUpdateDTO.work());
+        user.setBirthday(userUpdateDTO.birthday());
+        user.setCountry(userUpdateDTO.country());
+        if (userUpdateDTO.password() != null && !userUpdateDTO.password().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userUpdateDTO.password()));
+        }
+
+        userRepository.save(user);
+
+        return new UserDetailsDTO(user);
     }
 
     private void UserValidate(User user) {
