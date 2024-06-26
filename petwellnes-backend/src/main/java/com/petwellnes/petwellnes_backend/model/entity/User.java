@@ -31,6 +31,8 @@ public class User implements UserDetails {
     private LocalDate birthday;
     private LocalDate registerday;
     private String country;
+    private String profileImageUrl;
+    private String bannerUrl;
     private boolean enabled = true;
 
     @Override

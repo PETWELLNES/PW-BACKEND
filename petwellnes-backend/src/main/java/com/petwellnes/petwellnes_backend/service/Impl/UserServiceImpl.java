@@ -30,6 +30,8 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private static final String DEFAULT_PROFILE_IMAGE_URL = "default-profile.png";
+    private static final String DEFAULT_BANNER_URL = "default-banner.png";
 
     @Override
     public TokenResponse login(LoginRequest loginRequest) {
@@ -108,6 +110,8 @@ public class UserServiceImpl implements UserService {
         user.setWork(userUpdateDTO.work());
         user.setBirthday(userUpdateDTO.birthday());
         user.setCountry(userUpdateDTO.country());
+        user.setProfileImageUrl(userUpdateDTO.profileImageUrl());
+        user.setBannerUrl(userUpdateDTO.bannerUrl());
         if (userUpdateDTO.password() != null && !userUpdateDTO.password().isEmpty()) {
             user.setPassword(passwordEncoder.encode(userUpdateDTO.password()));
         }
@@ -115,6 +119,15 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return new UserDetailsDTO(user);
+    }
+
+    @Override
+    public void updateUserProfileImage(Long userId, String imageUrl) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+        user.setProfileImageUrl(imageUrl);
+        userRepository.save(user);
     }
 
     private void UserValidate(User user) {

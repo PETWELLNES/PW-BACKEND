@@ -17,7 +17,14 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.beans.factory.annotation.Value;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +32,9 @@ import java.util.Map;
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserController {
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     @Autowired
     private UserService userService;
@@ -82,6 +92,34 @@ public class UserController {
             return ResponseEntity.ok(updatedUser);
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @PostMapping("/upload-profile-image")
+    public ResponseEntity<?> uploadProfileImage(@RequestParam("file") MultipartFile file, @RequestParam("userId") Long userId) {
+        if (file.isEmpty() || !file.getContentType().startsWith("image/")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please select an image file");
+        }
+
+        try {
+            Path directory = Paths.get(uploadPath);
+            if (!Files.exists(directory)) {
+                Files.createDirectories(directory);
+            }
+
+            byte[] bytes = file.getBytes();
+            Path path = directory.resolve(file.getOriginalFilename());
+            Files.write(path, bytes);
+
+            String imageUrl = "/uploads/" + file.getOriginalFilename();
+            userService.updateUserProfileImage(userId, imageUrl);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("imageUrl", imageUrl);
+            return ResponseEntity.ok().body(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading file");
         }
     }
 }

@@ -11,6 +11,8 @@ public record UserUpdateDTO(
         String work,
         LocalDate birthday,
         String country,
-        String password
+        String password,
+        String profileImageUrl,
+        String bannerUrl
 ) {
 }
