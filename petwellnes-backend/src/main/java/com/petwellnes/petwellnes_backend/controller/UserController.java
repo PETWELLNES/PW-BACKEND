@@ -122,4 +122,32 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading file");
         }
     }
+
+    @PostMapping("/upload-banner-image")
+    public ResponseEntity<?> uploadBannerImage(@RequestParam("file") MultipartFile file, @RequestParam("userId") Long userId) {
+        if (file.isEmpty() || !file.getContentType().startsWith("image/")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please select an image file");
+        }
+
+        try {
+            Path directory = Paths.get(uploadPath);
+            if (!Files.exists(directory)) {
+                Files.createDirectories(directory);
+            }
+
+            byte[] bytes = file.getBytes();
+            Path path = directory.resolve(file.getOriginalFilename());
+            Files.write(path, bytes);
+
+            String imageUrl = "/uploads/" + file.getOriginalFilename();
+            userService.updateUserBannerImage(userId, imageUrl);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("imageUrl", imageUrl);
+            return ResponseEntity.ok().body(response);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading file");
+        }
+    }
 }
