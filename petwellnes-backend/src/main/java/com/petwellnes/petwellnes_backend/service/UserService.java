@@ -20,4 +20,6 @@ public interface UserService {
     UserDetailsDTO updateUserDetails(Long userId, UserUpdateDTO userUpdateDTO);
 
     void updateUserProfileImage(Long userId, String imageUrl);
+
+    void updateUserBannerImage(Long userId, String imageUrl);
 }

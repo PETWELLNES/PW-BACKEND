@@ -135,4 +135,13 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("El username no puede ser vacío");
         }
     }
+
+    @Override
+    public void updateUserBannerImage(Long userId, String imageUrl) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+
+        user.setBannerUrl(imageUrl);
+        userRepository.save(user);
+    }
 }
