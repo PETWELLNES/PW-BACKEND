@@ -1,4 +1,4 @@
-package com.petwellnes.petwellnes_backend.service.impl;
+package com.petwellnes.petwellnes_backend.service.Impl;
 
 import com.petwellnes.petwellnes_backend.model.dto.petDto.PetDto;
 import com.petwellnes.petwellnes_backend.model.entity.Pet;
@@ -8,6 +8,8 @@ import com.petwellnes.petwellnes_backend.infra.repository.UserRepository;
 import com.petwellnes.petwellnes_backend.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PetServiceImpl implements PetService {
@@ -32,5 +34,15 @@ public class PetServiceImpl implements PetService {
         pet.setUser(user);
 
         return petRepository.save(pet);
+    }
+
+    @Override
+    public List<Pet> getPetsByUserId(Long userId) {
+        return petRepository.findByUserId(userId);
+    }
+
+    @Override
+    public Pet getPetByIdAndUserId(Long id, Long userId) {
+        return petRepository.findByIdAndUserId(id, userId);
     }
 }

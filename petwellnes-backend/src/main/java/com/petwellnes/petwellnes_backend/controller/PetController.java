@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/pets")
 public class PetController {
@@ -20,5 +22,17 @@ public class PetController {
     public ResponseEntity<Pet> createPet(@RequestBody PetDto petDto, @AuthenticationPrincipal User user) {
         Pet newPet = petService.createPet(petDto, user.getUserId());
         return ResponseEntity.ok(newPet);
+    }
+
+    @GetMapping("/selectbyuser/{userId}")
+    public ResponseEntity<List<Pet>> getPetsByUser(@AuthenticationPrincipal User user) {
+        List<Pet> pets = petService.getPetsByUserId(user.getUserId());
+        return ResponseEntity.ok(pets);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Pet> getPetById(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        Pet pet = petService.getPetByIdAndUserId(id, user.getUserId());
+        return ResponseEntity.ok(pet);
     }
 }
