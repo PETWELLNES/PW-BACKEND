@@ -43,6 +43,7 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public Pet getPetByIdAndUserId(Long id, Long userId) {
-        return petRepository.findByIdAndUserId(id, userId);
+        return petRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new RuntimeException("Pet not found"));
     }
 }

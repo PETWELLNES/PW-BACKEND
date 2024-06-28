@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PetRepository extends JpaRepository<Pet, Long> {
 
@@ -15,5 +16,5 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
 
     // Encuentra una mascota por su ID y el ID del usuario
     @Query("SELECT p FROM Pet p WHERE p.id = :id AND p.user.userId = :userId")
-    Pet findByIdAndUserId(@Param("id") Long id, @Param("userId") Long userId);
+    Optional<Pet> findByIdAndUserId(@Param("id") Long id, @Param("userId") Long userId);
 }
