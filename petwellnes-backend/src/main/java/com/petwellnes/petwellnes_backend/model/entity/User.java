@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 @Table(name = "users")
 @Entity(name = "User")
@@ -16,7 +17,6 @@ import java.util.Collections;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "userId")
-
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +34,9 @@ public class User implements UserDetails {
     private String profileImageUrl;
     private String bannerUrl;
     private boolean enabled = true;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Pet> pets;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
