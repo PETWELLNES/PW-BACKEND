@@ -46,4 +46,18 @@ public class PetServiceImpl implements PetService {
         return petRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new RuntimeException("Pet not found"));
     }
+
+    @Override
+    public Pet updatePet(Long id, PetDto petDto, Long userId) {
+        Pet existingPet = petRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new RuntimeException("Pet not found"));
+
+        existingPet.setName(petDto.getName());
+        existingPet.setSpecies(petDto.getSpecies());
+        existingPet.setBreed(petDto.getBreed());
+        existingPet.setAge(petDto.getAge());
+        existingPet.setPhoto(petDto.getPhoto());
+
+        return petRepository.save(existingPet);
+    }
 }

@@ -9,4 +9,5 @@ public interface PetService {
     Pet createPet(PetDto petDto, Long userId);
     List<Pet> getPetsByUserId(Long userId);
     Pet getPetByIdAndUserId(Long id, Long userId);
+    Pet updatePet(Long id, PetDto petDto, Long userId);
 }

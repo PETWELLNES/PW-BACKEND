@@ -24,7 +24,7 @@ public class PetController {
         return ResponseEntity.ok(newPet);
     }
 
-    @GetMapping("/selectbyuser/{userId}")
+    @GetMapping("/selectbyuser")
     public ResponseEntity<List<Pet>> getPetsByUser(@AuthenticationPrincipal User user) {
         List<Pet> pets = petService.getPetsByUserId(user.getUserId());
         return ResponseEntity.ok(pets);
@@ -34,5 +34,11 @@ public class PetController {
     public ResponseEntity<Pet> getPetById(@PathVariable Long id, @AuthenticationPrincipal User user) {
         Pet pet = petService.getPetByIdAndUserId(id, user.getUserId());
         return ResponseEntity.ok(pet);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Pet> updatePet(@PathVariable Long id, @RequestBody PetDto petDto, @AuthenticationPrincipal User user) {
+        Pet updatedPet = petService.updatePet(id, petDto, user.getUserId());
+        return ResponseEntity.ok(updatedPet);
     }
 }
