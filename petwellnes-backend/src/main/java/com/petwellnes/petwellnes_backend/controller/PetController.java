@@ -41,4 +41,10 @@ public class PetController {
         Pet updatedPet = petService.updatePet(id, petDto, user.getUserId());
         return ResponseEntity.ok(updatedPet);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePet(@PathVariable Long id, @AuthenticationPrincipal User user) {
+        petService.deletePet(id, user.getUserId());
+        return ResponseEntity.noContent().build();
+    }
 }

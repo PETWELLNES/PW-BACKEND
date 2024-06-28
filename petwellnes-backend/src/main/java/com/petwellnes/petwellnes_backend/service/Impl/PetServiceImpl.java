@@ -60,4 +60,11 @@ public class PetServiceImpl implements PetService {
 
         return petRepository.save(existingPet);
     }
+
+    @Override
+    public void deletePet(Long id, Long userId) {
+        Pet existingPet = petRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new RuntimeException("Pet not found"));
+        petRepository.delete(existingPet);
+    }
 }
