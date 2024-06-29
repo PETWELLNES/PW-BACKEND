@@ -1,5 +1,6 @@
 package com.petwellnes.petwellnes_backend.controller;
 
+import com.petwellnes.petwellnes_backend.infra.config.security.ChangePasswordRequest;
 import com.petwellnes.petwellnes_backend.infra.config.security.LoginRequest;
 import com.petwellnes.petwellnes_backend.infra.config.security.TokenResponse;
 import com.petwellnes.petwellnes_backend.model.dto.userDto.UserDetailsDTO;
@@ -148,6 +149,27 @@ public class UserController {
         } catch (IOException e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading file");
+        }
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+        try {
+            boolean isChanged = userService.changePassword(changePasswordRequest);
+            if (isChanged) {
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "Contraseña cambiada correctamente");
+                return ResponseEntity.ok(response);
+            } else {
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "La contraseña actual es incorrecta");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Error interno del servidor");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 }
