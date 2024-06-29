@@ -1,4 +1,4 @@
 package com.petwellnes.petwellnes_backend.model.entity;
 
-public class Grupo {
+public class Group {
 }

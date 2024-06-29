@@ -17,77 +17,73 @@ public class Post {
     private Long id;
 
     @Column(columnDefinition = "DATE")
-    private Date fecha;
+    private Date date;
 
     @Column(columnDefinition = "TIME")
-    private Time hora;
+    private Time time;
 
     @Column(nullable = false)
-    private String categoria;
+    private String category;
 
     @ManyToOne
-    @JoinColumn(name = "id_usuario", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "tema", nullable = false)
-    private Topic tema;
+    @JoinColumn(name = "topic_id", nullable = false)
+    private Topic topic;
 
     @ManyToOne
-    @JoinColumn(name = "tipo_mascota", nullable = false)
-    private TipoMascota tipoMascota;
+    @JoinColumn(name = "pet_type_id", nullable = false)
+    private Type petType;
 
     @Column(length = 10485760)
-    private String img;
+    private String image;
 
     @Column(length = 10485760)
     private String video;
 
     @Column(nullable = false, length = 10485760)
-    private String contenido;
+    private String content;
 
     @Column
-    private String enlace;
+    private String link;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "publicacion")
-    private List<Comment> comentaries;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    private List<Comment> comments;
 
     @Column
-    private int reacciones = 0;
+    private int reactions = 0;
 
     @ManyToOne
-    @JoinColumn(name = "raza")
-    private RazaAnimal raza;
+    @JoinColumn(name = "breed_id")
+    private Race race;
 
-    public Publicacion(User user, String categoria, Topic tema, TipoMascota tipoMascota, String img, String video, String contenido, String enlace) {
-        this.fecha = new Date();
-        this.hora = new Time(System.currentTimeMillis());
+    public Post(User user, String category, Long topicId, Long petTypeId, String image, String video, String content, String link) {
+        this.date = new Date();
+        this.time = new Time(System.currentTimeMillis());
         this.user = user;
-        this.categoria = categoria;
-        this.tema = tema;
-        this.tipoMascota = tipoMascota;
-        this.img = img;
+        this.category = category;
+        this.topic = new Topic();
+        this.topic.setId(topicId);
+        this.petType = new Type();
+        this.petType.setId(petTypeId);
+        this.image = image;
         this.video = video;
-        this.contenido = contenido;
-        this.enlace = enlace;
+        this.content = content;
+        this.link = link;
     }
 
-    public Publicacion(User user, String categoria, Topic tema, TipoMascota tipoMascota, String img, String video, String contenido, String enlace, RazaAnimal raza) {
-        this.fecha = new Date();
-        this.hora = new Time(System.currentTimeMillis());
-        this.user = user;
-        this.categoria = categoria;
-        this.tema = tema;
-        this.tipoMascota = tipoMascota;
-        this.img = img;
-        this.video = video;
-        this.contenido = contenido;
-        this.enlace = enlace;
-        this.raza = raza;
+    public Post(User user, String category, Long topicId, Long petTypeId, String image, String video, String content, String link, Long breedId) {
+        this(user, category, topicId, petTypeId, image, video, content, link);
+        if (breedId != null) {
+            this.race = new Race();
+            this.race.setId(breedId);
+        }
     }
 
-    public Publicacion() {
-        this.fecha = new Date();
-        this.hora = new Time(System.currentTimeMillis());
+    public Post() {
+        this.date = new Date();
+        this.time = new Time(System.currentTimeMillis());
     }
 }

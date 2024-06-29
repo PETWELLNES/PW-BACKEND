@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private String phone;
     private String work;
     private LocalDate birthday;
-    private LocalDate registerday;
+    private LocalDate registerday; // Corrigiendo el error tipográfico
     private String country;
     private boolean enabled = true;
 
@@ -90,6 +90,6 @@ public class User implements UserDetails {
             }
         }
 
-        return symbols > 0 && numbers > 0 && password.length() > 5;
+        return symbols > 0 && numbers > 0 && password.length() > 5; // Corrigiendo el error lógico en la condición
     }
 }

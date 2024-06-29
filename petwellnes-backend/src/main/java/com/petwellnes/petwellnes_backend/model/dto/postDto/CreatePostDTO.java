@@ -1,10 +1,9 @@
-package com.petwellnes.petwellnes_backend.model.entity.dto;
+package com.petwellnes.petwellnes_backend.model.dto.postDto;
 
 import lombok.Data;
 
 @Data
-public class PostDTO {
-    private Long id;
+public class CreatePostDTO {
     private String category;
     private Long topic;
     private Long petType;
@@ -12,7 +11,5 @@ public class PostDTO {
     private String video;
     private String content;
     private String link;
-    private Long userId;
-    private int reactions;
-    private Long breed;
+    private Long animalBreed;
 }

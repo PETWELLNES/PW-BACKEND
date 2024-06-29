@@ -1,4 +1,4 @@
-package com.petwellnes.petwellnes_backend.model.entity.dto;
+package com.petwellnes.petwellnes_backend.model.dto.postDto;
 
 import lombok.Data;
 
