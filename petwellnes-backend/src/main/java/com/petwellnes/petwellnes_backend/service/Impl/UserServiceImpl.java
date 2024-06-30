@@ -1,5 +1,6 @@
 package com.petwellnes.petwellnes_backend.service.Impl;
 
+import com.petwellnes.petwellnes_backend.infra.config.security.ChangePasswordRequest;
 import com.petwellnes.petwellnes_backend.infra.config.security.LoginRequest;
 import com.petwellnes.petwellnes_backend.infra.config.security.TokenResponse;
 import com.petwellnes.petwellnes_backend.infra.exception.UsernameNotFoundException;
@@ -78,12 +79,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getAuthUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Contexto de seguridad: " + SecurityContextHolder.getContext());
 
         if (auth == null || !auth.isAuthenticated()) {
+            System.out.println("No hay usuario autenticado");
             throw new RuntimeException("No hay usuario autenticado");
         }
 
         String currentUserName = auth.getName();
+        System.out.println("Usuario autenticado: " + currentUserName);
         return userRepository.findByUsername(currentUserName)
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
     }
@@ -143,5 +147,23 @@ public class UserServiceImpl implements UserService {
 
         user.setBannerUrl(imageUrl);
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public boolean changePassword(ChangePasswordRequest changePasswordRequest) {
+        try {
+            User user = getAuthUser();
+            if (passwordEncoder.matches(changePasswordRequest.getCurrentPassword(), user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+                userRepository.save(user);
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw ex;
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.petwellnes.petwellnes_backend.service;
 
+import com.petwellnes.petwellnes_backend.infra.config.security.ChangePasswordRequest;
 import com.petwellnes.petwellnes_backend.infra.config.security.LoginRequest;
 import com.petwellnes.petwellnes_backend.infra.config.security.TokenResponse;
 import com.petwellnes.petwellnes_backend.model.dto.userDto.UserDetailsDTO;
@@ -22,4 +23,6 @@ public interface UserService {
     void updateUserProfileImage(Long userId, String imageUrl);
 
     void updateUserBannerImage(Long userId, String imageUrl);
+
+    boolean changePassword(ChangePasswordRequest changePasswordRequest);
 }
