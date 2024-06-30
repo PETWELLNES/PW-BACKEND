@@ -48,7 +48,6 @@ public class SecurityConfig implements WebMvcConfigurer {
                                 .requestMatchers(HttpMethod.PUT).permitAll()
                                 .requestMatchers(HttpMethod.DELETE).permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                                .requestMatchers("/api/pets/**").permitAll()  // Permitir todas las rutas dentro de /api/pets
                                 .requestMatchers("/api/v1/pets/**").permitAll()
                                 .requestMatchers("/user/**").permitAll()
                                 .requestMatchers("/healthcheck").permitAll()
