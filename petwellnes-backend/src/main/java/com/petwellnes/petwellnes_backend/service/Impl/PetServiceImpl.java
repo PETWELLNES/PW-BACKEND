@@ -38,7 +38,7 @@ public class PetServiceImpl implements PetService {
         pet.setSpecies(petDto.getSpecies());
         pet.setBreed(petDto.getBreed());
         pet.setAge(petDto.getAge());
-        pet.setPhoto(petDto.getPhoto());
+        pet.setPhoto(petDto.getPhoto()); // URL de la foto general
         pet.setUser(user);
 
         return petRepository.save(pet);
@@ -64,7 +64,7 @@ public class PetServiceImpl implements PetService {
         existingPet.setSpecies(petDto.getSpecies());
         existingPet.setBreed(petDto.getBreed());
         existingPet.setAge(petDto.getAge());
-        existingPet.setPhoto(petDto.getPhoto());
+        existingPet.setPhoto(petDto.getPhoto()); // URL de la foto general
 
         return petRepository.save(existingPet);
     }
@@ -76,25 +76,4 @@ public class PetServiceImpl implements PetService {
         petRepository.delete(existingPet);
     }
 
-    @Override
-    public Pet uploadProfilePhoto(Long id, MultipartFile file, Long userId) throws IOException {
-        Pet existingPet = petRepository.findByIdAndUserId(id, userId)
-                .orElseThrow(() -> new RuntimeException("Pet not found"));
-
-        // Crear el directorio si no existe
-        if (!Files.exists(root)) {
-            Files.createDirectory(root);
-        }
-
-        // Generar un nombre único para el archivo
-        String filename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-        Path filePath = root.resolve(filename);
-
-        // Guardar el archivo en el sistema de archivos
-        Files.copy(file.getInputStream(), filePath);
-
-        // Actualizar la foto de perfil de la mascota
-        existingPet.setProfilePhoto(filename);
-        return petRepository.save(existingPet);
-    }
 }

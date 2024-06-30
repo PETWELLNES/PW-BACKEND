@@ -1,7 +1,6 @@
 package com.petwellnes.petwellnes_backend.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 @Entity
 @Data
