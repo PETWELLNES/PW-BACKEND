@@ -13,5 +13,4 @@ public interface PetService {
     Pet getPetByIdAndUserId(Long id, Long userId);
     Pet updatePet(Long id, PetDto petDto, Long userId);
     void deletePet(Long id, Long userId);
-    Pet uploadProfilePhoto(Long id, MultipartFile file, Long userId) throws IOException;
 }

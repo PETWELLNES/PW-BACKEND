@@ -1,12 +1,16 @@
 package com.petwellnes.petwellnes_backend.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Pet {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -14,12 +18,11 @@ public class Pet {
     private String species;
     private String breed;
     private Integer age;
-    private String photo;
+    private String photo; // URL de la foto general
+    private String profilePhoto; // URL de la foto de perfil
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonBackReference
     private User user;
-
-    // Añade este campo para la foto de perfil
-    private String profilePhoto;
 }
