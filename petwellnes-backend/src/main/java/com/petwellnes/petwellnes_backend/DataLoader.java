@@ -83,7 +83,6 @@ public class DataLoader implements CommandLineRunner {
 
     private void loadTopics() {
         if (topicRepository.count() == 0) {
-            addTopic("Todos");
             addTopic("General");
             addTopic("Comportamiento");
             addTopic("Alimentación");
