@@ -23,18 +23,18 @@ public class VetVisitServiceImpl implements VetVisitService {
     private PetRepository petRepository;
 
     @Override
-    public List<VetVisit> getAllVetVisitsByPetId(Long petId) {
-        return vetVisitRepository.findByPetId(petId);
+    public List<VetVisit> getAllVetVisitsByPetId(Long petId, Long userId) {
+        return vetVisitRepository.findByPetIdAndUserUserId(petId, userId);
     }
 
     @Override
-    public Optional<VetVisit> getVetVisitById(Long id) {
-        return vetVisitRepository.findById(id);
+    public Optional<VetVisit> getVetVisitById(Long id, Long userId) {
+        return vetVisitRepository.findByIdAndUserUserId(id, userId);
     }
 
     @Override
-    public VetVisit createVetVisit(VetVisitDTO vetVisitDTO) {
-        Pet pet = petRepository.findById(vetVisitDTO.getPetId())
+    public VetVisit createVetVisit(VetVisitDTO vetVisitDTO, Long userId) {
+        Pet pet = petRepository.findByIdAndUserId(vetVisitDTO.getPetId(), userId)
                 .orElseThrow(() -> new CustomException("Pet not found"));
 
         VetVisit vetVisit = new VetVisit();
@@ -42,13 +42,14 @@ public class VetVisitServiceImpl implements VetVisitService {
         vetVisit.setReason(vetVisitDTO.getReason());
         vetVisit.setNotes(vetVisitDTO.getNotes());
         vetVisit.setPet(pet);
+        vetVisit.setUser(pet.getUser()); // Asignar el usuario del propietario de la mascota
 
         return vetVisitRepository.save(vetVisit);
     }
 
     @Override
-    public VetVisit updateVetVisit(Long id, VetVisitDTO vetVisitDTO) {
-        VetVisit vetVisit = vetVisitRepository.findById(id)
+    public VetVisit updateVetVisit(Long id, VetVisitDTO vetVisitDTO, Long userId) {
+        VetVisit vetVisit = vetVisitRepository.findByIdAndUserUserId(id, userId)
                 .orElseThrow(() -> new CustomException("VetVisit not found"));
 
         vetVisit.setDate(vetVisitDTO.getDate());
@@ -59,8 +60,8 @@ public class VetVisitServiceImpl implements VetVisitService {
     }
 
     @Override
-    public void deleteVetVisit(Long id) {
-        VetVisit vetVisit = vetVisitRepository.findById(id)
+    public void deleteVetVisit(Long id, Long userId) {
+        VetVisit vetVisit = vetVisitRepository.findByIdAndUserUserId(id, userId)
                 .orElseThrow(() -> new CustomException("VetVisit not found"));
         vetVisitRepository.delete(vetVisit);
     }

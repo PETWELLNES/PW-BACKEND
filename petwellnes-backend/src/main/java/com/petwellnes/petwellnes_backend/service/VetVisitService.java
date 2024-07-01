@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface VetVisitService {
-    List<VetVisit> getAllVetVisitsByPetId(Long petId);
-    Optional<VetVisit> getVetVisitById(Long id);
-    VetVisit createVetVisit(VetVisitDTO vetVisitDTO);
-    VetVisit updateVetVisit(Long id, VetVisitDTO vetVisitDTO);
-    void deleteVetVisit(Long id);
+    List<VetVisit> getAllVetVisitsByPetId(Long petId, Long userId);
+    Optional<VetVisit> getVetVisitById(Long id, Long userId);
+    VetVisit createVetVisit(VetVisitDTO vetVisitDTO, Long userId);
+    VetVisit updateVetVisit(Long id, VetVisitDTO vetVisitDTO, Long userId);
+    void deleteVetVisit(Long id, Long userId);
 }

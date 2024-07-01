@@ -17,4 +17,6 @@ public interface PetRepository extends JpaRepository<Pet, Long> {
     // Encuentra una mascota por su ID y el ID del usuario
     @Query("SELECT p FROM Pet p WHERE p.id = :id AND p.user.userId = :userId")
     Optional<Pet> findByIdAndUserId(@Param("id") Long id, @Param("userId") Long userId);
+
+
 }

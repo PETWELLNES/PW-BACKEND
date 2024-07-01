@@ -8,14 +8,8 @@ import com.petwellnes.petwellnes_backend.infra.repository.UserRepository;
 import com.petwellnes.petwellnes_backend.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class PetServiceImpl implements PetService {
@@ -25,8 +19,6 @@ public class PetServiceImpl implements PetService {
 
     @Autowired
     private UserRepository userRepository;
-
-    private final Path root = Paths.get("uploads");
 
     @Override
     public Pet createPet(PetDto petDto, Long userId) {
@@ -38,7 +30,7 @@ public class PetServiceImpl implements PetService {
         pet.setSpecies(petDto.getSpecies());
         pet.setBreed(petDto.getBreed());
         pet.setAge(petDto.getAge());
-        pet.setPhoto(petDto.getPhoto()); // URL de la foto general
+        pet.setPhoto(petDto.getPhoto());
         pet.setUser(user);
 
         return petRepository.save(pet);
@@ -64,7 +56,7 @@ public class PetServiceImpl implements PetService {
         existingPet.setSpecies(petDto.getSpecies());
         existingPet.setBreed(petDto.getBreed());
         existingPet.setAge(petDto.getAge());
-        existingPet.setPhoto(petDto.getPhoto()); // URL de la foto general
+        existingPet.setPhoto(petDto.getPhoto());
 
         return petRepository.save(existingPet);
     }
@@ -75,5 +67,4 @@ public class PetServiceImpl implements PetService {
                 .orElseThrow(() -> new RuntimeException("Pet not found"));
         petRepository.delete(existingPet);
     }
-
 }
