@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         System.out.println("Contexto de seguridad: " + SecurityContextHolder.getContext());
 
-        if (auth == null || !auth.isAuthenticated()) {
+        if (auth == null || !auth.isAuthenticated() || auth.getPrincipal().equals("anonymousUser")) {
             System.out.println("No hay usuario autenticado");
             throw new RuntimeException("No hay usuario autenticado");
         }
