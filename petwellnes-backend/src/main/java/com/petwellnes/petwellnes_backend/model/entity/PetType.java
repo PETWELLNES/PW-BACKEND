@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class PetType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long petTypeId;
 
     @Column(nullable = false)
     private String name;

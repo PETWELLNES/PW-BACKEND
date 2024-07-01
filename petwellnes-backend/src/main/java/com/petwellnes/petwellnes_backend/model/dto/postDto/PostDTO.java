@@ -4,6 +4,8 @@ import com.petwellnes.petwellnes_backend.model.entity.Post;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 public class PostDTO {
@@ -15,15 +17,21 @@ public class PostDTO {
     private String petTypeName;
     private Long petBreedId;
     private String petBreedName;
+    private Long topicId;
+    private String topicName;
+    private LocalDateTime createdAt;
 
     public PostDTO(Post post) {
         this.postId = post.getPostId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.userId = post.getUser().getUserId();
-        this.petTypeId = post.getPetType().getId();
+        this.petTypeId = post.getPetType().getPetTypeId();
         this.petTypeName = post.getPetType().getName();
-        this.petBreedId = post.getPetBreed().getId();
+        this.petBreedId = post.getPetBreed().getPetBreedId();
         this.petBreedName = post.getPetBreed().getName();
+        this.topicId = post.getTopic().getTopicId();
+        this.topicName = post.getTopic().getName();
+        this.createdAt = post.getCreatedAt();
     }
 }

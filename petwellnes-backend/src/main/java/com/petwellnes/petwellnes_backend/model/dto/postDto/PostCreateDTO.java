@@ -20,4 +20,7 @@ public class PostCreateDTO {
 
     @NotNull
     private Long petBreedId;
+
+    @NotNull
+    private Long topicId;
 }

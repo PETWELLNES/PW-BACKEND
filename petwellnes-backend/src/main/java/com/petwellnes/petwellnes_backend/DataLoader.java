@@ -2,162 +2,101 @@ package com.petwellnes.petwellnes_backend;
 
 import com.petwellnes.petwellnes_backend.infra.repository.PetBreedRepository;
 import com.petwellnes.petwellnes_backend.infra.repository.PetTypeRepository;
+import com.petwellnes.petwellnes_backend.infra.repository.TopicRepository;
 import com.petwellnes.petwellnes_backend.model.entity.PetBreed;
 import com.petwellnes.petwellnes_backend.model.entity.PetType;
+import com.petwellnes.petwellnes_backend.model.entity.Topic;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner {
     private final PetTypeRepository petTypeRepository;
     private final PetBreedRepository petBreedRepository;
+    private final TopicRepository topicRepository;
 
     @Override
     public void run(String... args) throws Exception {
-        PetType dog = new PetType();
-        dog.setName("Perro");
-        petTypeRepository.save(dog);
-
-        addPetBreed("Labrador Retriever", dog);
-        addPetBreed("Bulldog", dog);
-        addPetBreed("Beagle", dog);
-        addPetBreed("Poodle", dog);
-        addPetBreed("Rottweiler", dog);
-        addPetBreed("Yorkshire Terrier", dog);
-        addPetBreed("Boxer", dog);
-        addPetBreed("Dachshund", dog);
-        addPetBreed("Pastor Alemán", dog);
-        addPetBreed("Golden Retriever", dog);
-        addPetBreed("Shih Tzu", dog);
-        addPetBreed("Doberman Pinscher", dog);
-        addPetBreed("Chihuahua", dog);
-        addPetBreed("Gran Danés", dog);
-        addPetBreed("Husky Siberiano", dog);
-        addPetBreed("Callejero", dog);
-        addPetBreed("No Identificado", dog);
-
-        PetType cat = new PetType();
-        cat.setName("Gato");
-        petTypeRepository.save(cat);
-
-        addPetBreed("Siamés", cat);
-        addPetBreed("Persa", cat);
-        addPetBreed("Maine Coon", cat);
-        addPetBreed("Ragdoll", cat);
-        addPetBreed("British Shorthair", cat);
-        addPetBreed("Abisinio", cat);
-        addPetBreed("Bengala", cat);
-        addPetBreed("Sphynx", cat);
-        addPetBreed("Scottish Fold", cat);
-        addPetBreed("Azul Ruso", cat);
-        addPetBreed("Savannah", cat);
-        addPetBreed("Bosque de Noruega", cat);
-        addPetBreed("Oriental Shorthair", cat);
-        addPetBreed("Angora Turco", cat);
-        addPetBreed("Callejero", cat);
-        addPetBreed("No Identificado", cat);
-
-        PetType fish = new PetType();
-        fish.setName("Pez");
-        petTypeRepository.save(fish);
-
-        addPetBreed("Pez Payaso", fish);
-        addPetBreed("Pez Dorado", fish);
-        addPetBreed("Betta", fish);
-        addPetBreed("Guppy", fish);
-        addPetBreed("Tetra", fish);
-        addPetBreed("Pez Ángel", fish);
-        addPetBreed("Cíclido", fish);
-        addPetBreed("Bagre", fish);
-        addPetBreed("Molly", fish);
-        addPetBreed("Pez Espada", fish);
-        addPetBreed("Platy", fish);
-        addPetBreed("Óscar", fish);
-        addPetBreed("Koi", fish);
-        addPetBreed("Gurami", fish);
-        addPetBreed("Neón Tetra", fish);
-        addPetBreed("Disco", fish);
-        addPetBreed("No Identificado", fish);
-
-        PetType rodent = new PetType();
-        rodent.setName("Roedor");
-        petTypeRepository.save(rodent);
-
-        addPetBreed("Cuy", rodent);
-        addPetBreed("Conejo", rodent);
-        addPetBreed("Hámster", rodent);
-        addPetBreed("Ratón", rodent);
-        addPetBreed("Rata", rodent);
-        addPetBreed("Jerbo", rodent);
-        addPetBreed("Chinchilla", rodent);
-        addPetBreed("Ardilla", rodent);
-        addPetBreed("Perro de la pradera", rodent);
-        addPetBreed("Degu", rodent);
-        addPetBreed("No Identificado", rodent);
-
-        PetType bird = new PetType();
-        bird.setName("Ave");
-        petTypeRepository.save(bird);
-
-        addPetBreed("Periquito", bird);
-        addPetBreed("Canario", bird);
-        addPetBreed("Cacatúa", bird);
-        addPetBreed("Agapornis", bird);
-        addPetBreed("Pinzón", bird);
-        addPetBreed("Pájaro Budgie", bird);
-        addPetBreed("Loro", bird);
-        addPetBreed("Guacamayo", bird);
-        addPetBreed("Cacatúa", bird);
-        addPetBreed("Conuro", bird);
-        addPetBreed("Gris Africano", bird);
-        addPetBreed("Ecléctico", bird);
-        addPetBreed("Loriquito", bird);
-        addPetBreed("Paloma", bird);
-        addPetBreed("Tórtola", bird);
-        addPetBreed("No Identificado", bird);
-
-        PetType reptile = new PetType();
-        reptile.setName("Reptil");
-        petTypeRepository.save(reptile);
-
-        addPetBreed("Tortuga", reptile);
-        addPetBreed("Camaleón", reptile);
-        addPetBreed("Iguana", reptile);
-        addPetBreed("Geco", reptile);
-        addPetBreed("Dragón Barbudo", reptile);
-        addPetBreed("Serpiente", reptile);
-        addPetBreed("Tortuga de Tierra", reptile);
-        addPetBreed("Lagarto Monitor", reptile);
-        addPetBreed("Anole", reptile);
-        addPetBreed("Eslizón", reptile);
-        addPetBreed("Boa", reptile);
-        addPetBreed("Pitón", reptile);
-        addPetBreed("Cobra", reptile);
-        addPetBreed("Caimán", reptile);
-        addPetBreed("Cocodrilo", reptile);
-        addPetBreed("No Identificado", reptile);
-
-        PetType other = new PetType();
-        other.setName("Otro");
-        petTypeRepository.save(other);
-
-        addPetBreed("Caballo", other);
-        addPetBreed("Oveja", other);
-        addPetBreed("Cabra", other);
-        addPetBreed("Cerdo", other);
-        addPetBreed("Vaca", other);
-        addPetBreed("Llama", other);
-        addPetBreed("Alpaca", other);
-        addPetBreed("Burro", other);
-        addPetBreed("No Identificado", other);
+        loadPetTypesAndBreeds();
+        loadTopics();
     }
 
-    private void addPetBreed(String breedName, PetType petType) {
-        PetBreed breed = new PetBreed();
-        breed.setName(breedName);
-        breed.setPetType(petType);
-        petBreedRepository.save(breed);
+    private void loadPetTypesAndBreeds() {
+        addPetTypeWithBreeds("Perro", new String[]{
+                "Labrador Retriever", "Bulldog", "Beagle", "Poodle", "Rottweiler", "Yorkshire Terrier", "Boxer",
+                "Dachshund", "Pastor Alemán", "Golden Retriever", "Shih Tzu", "Doberman Pinscher", "Chihuahua",
+                "Gran Danés", "Husky Siberiano", "Callejero", "No Identificado"
+        });
+
+        addPetTypeWithBreeds("Gato", new String[]{
+                "Siamés", "Persa", "Maine Coon", "Ragdoll", "British Shorthair", "Abisinio", "Bengala",
+                "Sphynx", "Scottish Fold", "Azul Ruso", "Savannah", "Bosque de Noruega", "Oriental Shorthair",
+                "Angora Turco", "Callejero", "No Identificado"
+        });
+
+        addPetTypeWithBreeds("Pez", new String[]{
+                "Pez Payaso", "Pez Dorado", "Betta", "Guppy", "Tetra", "Pez Ángel", "Cíclido", "Bagre", "Molly",
+                "Pez Espada", "Platy", "Óscar", "Koi", "Gurami", "Neón Tetra", "Disco", "No Identificado"
+        });
+
+        addPetTypeWithBreeds("Roedor", new String[]{
+                "Cuy", "Conejo", "Hámster", "Ratón", "Rata", "Jerbo", "Chinchilla", "Ardilla", "Perro de la pradera",
+                "Degu", "No Identificado"
+        });
+
+        addPetTypeWithBreeds("Ave", new String[]{
+                "Periquito", "Canario", "Cacatúa", "Agapornis", "Pinzón", "Pájaro Budgie", "Loro", "Guacamayo",
+                "Conuro", "Gris Africano", "Ecléctico", "Loriquito", "Paloma", "Tórtola", "No Identificado"
+        });
+
+        addPetTypeWithBreeds("Reptil", new String[]{
+                "Tortuga", "Camaleón", "Iguana", "Geco", "Dragón Barbudo", "Serpiente", "Tortuga de Tierra",
+                "Lagarto Monitor", "Anole", "Eslizón", "Boa", "Pitón", "Cobra", "Caimán", "Cocodrilo", "No Identificado"
+        });
+
+        addPetTypeWithBreeds("Otro", new String[]{
+                "Caballo", "Oveja", "Cabra", "Cerdo", "Vaca", "Llama", "Alpaca", "Burro", "No Identificado"
+        });
+    }
+
+    private void addPetTypeWithBreeds(String typeName, String[] breedNames) {
+        Optional<PetType> optionalPetType = petTypeRepository.findByName(typeName);
+        PetType petType = optionalPetType.orElseGet(() -> {
+            PetType newType = new PetType();
+            newType.setName(typeName);
+            return petTypeRepository.save(newType);
+        });
+
+        for (String breedName : breedNames) {
+            if (!petBreedRepository.existsByNameAndPetType(breedName, petType)) {
+                PetBreed breed = new PetBreed();
+                breed.setName(breedName);
+                breed.setPetType(petType);
+                petBreedRepository.save(breed);
+            }
+        }
+    }
+
+    private void loadTopics() {
+        if (topicRepository.count() == 0) {
+            addTopic("Todos");
+            addTopic("General");
+            addTopic("Comportamiento");
+            addTopic("Alimentación");
+            addTopic("Salud");
+            addTopic("Moda");
+        }
+    }
+
+    private void addTopic(String topicName) {
+        if (!topicRepository.existsByName(topicName)) {
+            Topic topic = new Topic();
+            topic.setName(topicName);
+            topicRepository.save(topic);
+        }
     }
 }

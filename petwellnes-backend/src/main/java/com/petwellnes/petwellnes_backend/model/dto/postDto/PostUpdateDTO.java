@@ -17,4 +17,7 @@ public class PostUpdateDTO {
 
     @NotNull
     private Long petBreedId;
+
+    @NotNull
+    private Long topicId;
 }

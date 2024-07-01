@@ -3,6 +3,7 @@ package com.petwellnes.petwellnes_backend.service.Impl;
 import com.petwellnes.petwellnes_backend.infra.repository.PetBreedRepository;
 import com.petwellnes.petwellnes_backend.infra.repository.PetTypeRepository;
 import com.petwellnes.petwellnes_backend.infra.repository.PostRepository;
+import com.petwellnes.petwellnes_backend.infra.repository.TopicRepository;
 import com.petwellnes.petwellnes_backend.infra.repository.UserRepository;
 import com.petwellnes.petwellnes_backend.mapper.PostMapper;
 import com.petwellnes.petwellnes_backend.model.dto.postDto.PostCreateDTO;
@@ -11,10 +12,13 @@ import com.petwellnes.petwellnes_backend.model.dto.postDto.PostUpdateDTO;
 import com.petwellnes.petwellnes_backend.model.entity.PetBreed;
 import com.petwellnes.petwellnes_backend.model.entity.PetType;
 import com.petwellnes.petwellnes_backend.model.entity.Post;
+import com.petwellnes.petwellnes_backend.model.entity.Topic;
 import com.petwellnes.petwellnes_backend.model.entity.User;
 import com.petwellnes.petwellnes_backend.service.PostService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,10 +30,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
+    private static final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
+
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final PetTypeRepository petTypeRepository;
     private final PetBreedRepository petBreedRepository;
+    private final TopicRepository topicRepository;
     private final PostMapper postMapper;
 
     @Override
@@ -44,7 +51,11 @@ public class PostServiceImpl implements PostService {
         PetBreed petBreed = petBreedRepository.findById(postCreateDTO.getPetBreedId())
                 .orElseThrow(() -> new EntityNotFoundException("Raza de mascota no encontrada"));
 
-        if (!petBreed.getPetType().getId().equals(petType.getId())) {
+        Topic topic = topicRepository.findById(postCreateDTO.getTopicId())
+                .orElseThrow(() -> new EntityNotFoundException("Tema no encontrado"));
+
+        logger.info("Creating post with petTypeId: {}, petBreedId: {}, and topicId: {}", petType.getPetTypeId(), petBreed.getPetBreedId(), topic.getTopicId());
+        if (!petBreed.getPetType().getPetTypeId().equals(petType.getPetTypeId())) {
             throw new IllegalArgumentException("La raza de mascota no corresponde al tipo de mascota.");
         }
 
@@ -52,6 +63,7 @@ public class PostServiceImpl implements PostService {
         post.setUser(user);
         post.setPetType(petType);
         post.setPetBreed(petBreed);
+        post.setTopic(topic);
         postRepository.save(post);
         return postMapper.convertToDTO(post);
     }
@@ -83,7 +95,11 @@ public class PostServiceImpl implements PostService {
         PetBreed petBreed = petBreedRepository.findById(postUpdateDTO.getPetBreedId())
                 .orElseThrow(() -> new EntityNotFoundException("Raza de mascota no encontrada"));
 
-        if (!petBreed.getPetType().getId().equals(petType.getId())) {
+        Topic topic = topicRepository.findById(postUpdateDTO.getTopicId())
+                .orElseThrow(() -> new EntityNotFoundException("Tema no encontrado"));
+
+        logger.info("Updating post with petTypeId: {}, petBreedId: {}, and topicId: {}", petType.getPetTypeId(), petBreed.getPetBreedId(), topic.getTopicId());
+        if (!petBreed.getPetType().getPetTypeId().equals(petType.getPetTypeId())) {
             throw new IllegalArgumentException("La raza de mascota no corresponde al tipo de mascota.");
         }
 
@@ -91,6 +107,7 @@ public class PostServiceImpl implements PostService {
         post.setContent(postUpdateDTO.getContent());
         post.setPetType(petType);
         post.setPetBreed(petBreed);
+        post.setTopic(topic);
         postRepository.save(post);
 
         return postMapper.convertToDTO(post);
@@ -102,5 +119,13 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post no encontrado"));
         postRepository.delete(post);
+    }
+
+    @Override
+    public List<PostDTO> getRecentPosts() {
+        Pageable pageable = PageRequest.of(0, 5);
+        return postRepository.findAllByOrderByCreatedAtDesc(pageable).stream()
+                .map(postMapper::convertToDTO)
+                .collect(Collectors.toList());
     }
 }

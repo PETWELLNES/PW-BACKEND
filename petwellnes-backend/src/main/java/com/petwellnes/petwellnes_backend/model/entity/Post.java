@@ -3,6 +3,9 @@ package com.petwellnes.petwellnes_backend.model.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -29,4 +32,17 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "pet_breed_id", nullable = false)
     private PetBreed petBreed;
+
+    @ManyToOne
+    @JoinColumn(name = "topic_id", nullable = false)
+    private Topic topic;
+
+    @CreationTimestamp
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

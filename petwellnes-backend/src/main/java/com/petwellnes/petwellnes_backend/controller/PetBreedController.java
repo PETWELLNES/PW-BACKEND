@@ -35,6 +35,12 @@ public class PetBreedController {
         return ResponseEntity.ok(petBreeds);
     }
 
+    @GetMapping("/by-type")
+    public ResponseEntity<List<PetBreed>> getBreedsByType(@RequestParam Long typeId) {
+        List<PetBreed> petBreeds = petBreedService.getBreedsByType(typeId);
+        return ResponseEntity.ok(petBreeds);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<PetBreed> updatePetBreed(@PathVariable Long id, @RequestBody @Valid PetBreed petBreed) {
         PetBreed updatedPetBreed = petBreedService.updatePetBreed(id, petBreed);

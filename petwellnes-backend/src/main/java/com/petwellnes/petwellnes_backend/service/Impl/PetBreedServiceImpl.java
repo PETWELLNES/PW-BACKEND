@@ -31,6 +31,11 @@ public class PetBreedServiceImpl implements PetBreedService {
     }
 
     @Override
+    public List<PetBreed> getBreedsByType(Long typeId) {
+        return petBreedRepository.findByPetType_PetTypeId(typeId);
+    }
+
+    @Override
     public PetBreed updatePetBreed(Long id, PetBreed petBreed) {
         PetBreed existingPetBreed = petBreedRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Raza de mascota no encontrada"));
