@@ -11,4 +11,7 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
     List<Post> findByUserUserId(Long userId);
+    List<Post> findByPetTypeName(String petTypeName);
+    List<Post> findByPetBreedName(String petBreedName);
+    List<Post> findByPetTypeNameAndPetBreedName(String petTypeName, String petBreedName);
 }
