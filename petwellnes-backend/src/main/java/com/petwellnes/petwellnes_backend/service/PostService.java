@@ -22,10 +22,10 @@ public interface PostService {
 
     List<PostDTO> getPostsByUserId(Long userId);
 
-
     List<PostDTO> filterPostsByPetType(String petType);
 
     List<PostDTO> filterPostsByBreed(String breed);
 
     List<PostDTO> filterPostsByPetTypeAndBreed(String petType, String breed);
+
 }
