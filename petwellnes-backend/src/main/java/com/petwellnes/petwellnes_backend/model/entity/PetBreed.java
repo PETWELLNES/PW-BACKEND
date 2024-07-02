@@ -18,4 +18,9 @@ public class PetBreed {
     @ManyToOne
     @JoinColumn(name = "pet_type_id", nullable = false)
     private PetType petType;
+
+    // Agregar método setId
+    public void setPetBreedId(Long id) {
+        this.petBreedId = id;
+    }
 }

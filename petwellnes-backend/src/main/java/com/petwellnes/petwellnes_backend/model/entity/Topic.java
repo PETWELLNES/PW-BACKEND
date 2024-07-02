@@ -2,21 +2,19 @@ package com.petwellnes.petwellnes_backend.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Entity
 @Data
-@NoArgsConstructor
-public class PetType {
+@Entity
+@Table(name = "topics")
+public class Topic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long petTypeId;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    // Agregar método setId
-    public void setPetTypeId(Long id) {
-        this.petTypeId = id;
+    public Long getTopicId() {
+        return id;
     }
 }

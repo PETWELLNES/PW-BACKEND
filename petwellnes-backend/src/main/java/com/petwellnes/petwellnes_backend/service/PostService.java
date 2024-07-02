@@ -3,6 +3,7 @@ package com.petwellnes.petwellnes_backend.service;
 import com.petwellnes.petwellnes_backend.model.dto.postDto.PostCreateDTO;
 import com.petwellnes.petwellnes_backend.model.dto.postDto.PostDTO;
 import com.petwellnes.petwellnes_backend.model.dto.postDto.PostUpdateDTO;
+import com.petwellnes.petwellnes_backend.model.entity.Post;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface PostService {
     void deletePost(Long postId);
 
     List<PostDTO> getRecentPosts();
+
+    List<PostDTO> getPostsByUserId(Long userId);
 }

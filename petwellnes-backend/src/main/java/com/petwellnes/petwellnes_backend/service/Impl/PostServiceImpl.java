@@ -1,19 +1,11 @@
 package com.petwellnes.petwellnes_backend.service.Impl;
 
-import com.petwellnes.petwellnes_backend.infra.repository.PetBreedRepository;
-import com.petwellnes.petwellnes_backend.infra.repository.PetTypeRepository;
-import com.petwellnes.petwellnes_backend.infra.repository.PostRepository;
-import com.petwellnes.petwellnes_backend.infra.repository.TopicRepository;
-import com.petwellnes.petwellnes_backend.infra.repository.UserRepository;
+import com.petwellnes.petwellnes_backend.infra.repository.*;
 import com.petwellnes.petwellnes_backend.mapper.PostMapper;
 import com.petwellnes.petwellnes_backend.model.dto.postDto.PostCreateDTO;
 import com.petwellnes.petwellnes_backend.model.dto.postDto.PostDTO;
 import com.petwellnes.petwellnes_backend.model.dto.postDto.PostUpdateDTO;
-import com.petwellnes.petwellnes_backend.model.entity.PetBreed;
-import com.petwellnes.petwellnes_backend.model.entity.PetType;
-import com.petwellnes.petwellnes_backend.model.entity.Post;
-import com.petwellnes.petwellnes_backend.model.entity.Topic;
-import com.petwellnes.petwellnes_backend.model.entity.User;
+import com.petwellnes.petwellnes_backend.model.entity.*;
 import com.petwellnes.petwellnes_backend.service.PostService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +34,10 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PostDTO createPost(PostCreateDTO postCreateDTO) {
+        if (postCreateDTO.getUserId() == null) {
+            throw new IllegalArgumentException("User ID must not be null");
+        }
+
         User user = userRepository.findById(postCreateDTO.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
@@ -54,17 +50,24 @@ public class PostServiceImpl implements PostService {
         Topic topic = topicRepository.findById(postCreateDTO.getTopicId())
                 .orElseThrow(() -> new EntityNotFoundException("Tema no encontrado"));
 
-        logger.info("Creating post with petTypeId: {}, petBreedId: {}, and topicId: {}", petType.getPetTypeId(), petBreed.getPetBreedId(), topic.getTopicId());
+        logger.info("Creating post with petTypeId: {}, petBreedId: {}, and topicId: {}", petType.getPetTypeId(), petBreed.getPetBreedId(), topic.getId());
         if (!petBreed.getPetType().getPetTypeId().equals(petType.getPetTypeId())) {
             throw new IllegalArgumentException("La raza de mascota no corresponde al tipo de mascota.");
         }
 
-        Post post = postMapper.convertToEntity(postCreateDTO);
+        Post post = new Post();
         post.setUser(user);
         post.setPetType(petType);
         post.setPetBreed(petBreed);
         post.setTopic(topic);
-        postRepository.save(post);
+        post.setTitle(postCreateDTO.getTitle());
+        post.setCategory(postCreateDTO.getCategory());
+        post.setImage(postCreateDTO.getImage());
+        post.setVideo(postCreateDTO.getVideo());
+        post.setContent(postCreateDTO.getContent());
+        post.setLink(postCreateDTO.getLink());
+
+        post = postRepository.save(post);
         return postMapper.convertToDTO(post);
     }
 
@@ -84,6 +87,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostDTO> getPostsByUserId(Long userId) {
+        return postRepository.findByUserUserId(userId).stream()
+                .map(postMapper::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     @Transactional
     public PostDTO updatePost(Long postId, PostUpdateDTO postUpdateDTO) {
         Post post = postRepository.findById(postId)
@@ -98,13 +108,17 @@ public class PostServiceImpl implements PostService {
         Topic topic = topicRepository.findById(postUpdateDTO.getTopicId())
                 .orElseThrow(() -> new EntityNotFoundException("Tema no encontrado"));
 
-        logger.info("Updating post with petTypeId: {}, petBreedId: {}, and topicId: {}", petType.getPetTypeId(), petBreed.getPetBreedId(), topic.getTopicId());
+        logger.info("Updating post with petTypeId: {}, petBreedId: {}, and topicId: {}", petType.getPetTypeId(), petBreed.getPetBreedId(), topic.getId());
         if (!petBreed.getPetType().getPetTypeId().equals(petType.getPetTypeId())) {
             throw new IllegalArgumentException("La raza de mascota no corresponde al tipo de mascota.");
         }
 
         post.setTitle(postUpdateDTO.getTitle());
+        post.setCategory(postUpdateDTO.getCategory());
+        post.setImage(postUpdateDTO.getImage());
+        post.setVideo(postUpdateDTO.getVideo());
         post.setContent(postUpdateDTO.getContent());
+        post.setLink(postUpdateDTO.getLink());
         post.setPetType(petType);
         post.setPetBreed(petBreed);
         post.setTopic(topic);
