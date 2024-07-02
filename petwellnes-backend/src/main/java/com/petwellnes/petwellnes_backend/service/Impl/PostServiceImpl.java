@@ -142,4 +142,22 @@ public class PostServiceImpl implements PostService {
                 .map(postMapper::convertToDTO)
                 .collect(Collectors.toList());
     }
+    @Override
+    public List<PostDTO> filterPostsByPetType(String petType) {
+        List<Post> posts = postRepository.findByPetTypeName(petType); // Asegúrate de que este método existe en tu repositorio
+        return posts.stream().map(postMapper::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostDTO> filterPostsByBreed(String breed) {
+        List<Post> posts = postRepository.findByPetBreedName(breed); // Asegúrate de que este método existe en tu repositorio
+        return posts.stream().map(postMapper::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostDTO> filterPostsByPetTypeAndBreed(String petType, String breed) {
+        List<Post> posts = postRepository.findByPetTypeNameAndPetBreedName(petType, breed); // Asegúrate de que este método existe en tu repositorio
+        return posts.stream().map(postMapper::convertToDTO).collect(Collectors.toList());
+    }
+
 }

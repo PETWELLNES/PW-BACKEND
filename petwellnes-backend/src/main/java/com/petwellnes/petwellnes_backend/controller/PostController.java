@@ -68,4 +68,25 @@ public class PostController {
     public ResponseEntity<List<PostDTO>> getRecentPosts() {
         return ResponseEntity.ok(postService.getRecentPosts());
     }
+
+    // Filtrar publicaciones por tipo de mascota
+    @GetMapping("/discover/filterByPetType/{petType}")
+    public ResponseEntity<List<PostDTO>> filterByPetType(@PathVariable String petType) {
+        List<PostDTO> posts = postService.filterPostsByPetType(petType); // Filtrar publicaciones por tipo de mascota
+        return ResponseEntity.ok(posts); // Retornar las publicaciones filtradas
+    }
+
+    // Filtrar publicaciones por raza
+    @GetMapping("/discover/filterByBreed/{breed}")
+    public ResponseEntity<List<PostDTO>> filterByBreed(@PathVariable String breed) {
+        List<PostDTO> posts = postService.filterPostsByBreed(breed); // Filtrar publicaciones por raza
+        return ResponseEntity.ok(posts); // Retornar las publicaciones filtradas
+    }
+
+    // Filtrar publicaciones por tipo de mascota y raza
+    @GetMapping("/discover/filterByPetTypeAndBreed/{petType}/{breed}")
+    public ResponseEntity<List<PostDTO>> filterByPetTypeAndBreed(@PathVariable String petType, @PathVariable String breed) {
+        List<PostDTO> posts = postService.filterPostsByPetTypeAndBreed(petType, breed); // Filtrar publicaciones por tipo de mascota y raza
+        return ResponseEntity.ok(posts); // Retornar las publicaciones filtradas
+    }
 }
