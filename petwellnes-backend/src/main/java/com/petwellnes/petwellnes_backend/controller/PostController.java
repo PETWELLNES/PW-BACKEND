@@ -21,10 +21,10 @@ public class PostController {
     private final JwtService jwtService;
 
     // Crear una nueva publicación
-    @PostMapping("/create_post")
-    public ResponseEntity<PostDTO> createPost(@RequestBody PostCreateDTO postCreateDTO, HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        Long userId = jwtService.getUserIdFromToken(token);
+    @PostMapping("/create")
+    public ResponseEntity<PostDTO> createPost(@RequestBody PostCreateDTO postCreateDTO, @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
         postCreateDTO.setUserId(userId); // Set the userId from the token
         PostDTO newPost = postService.createPost(postCreateDTO);
         return ResponseEntity.ok(newPost);
@@ -44,22 +44,27 @@ public class PostController {
 
     // Obtener todas las publicaciones del usuario autenticado
     @GetMapping("/user")
-    public ResponseEntity<List<PostDTO>> getPostsByUser(HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        Long userId = jwtService.getUserIdFromToken(token);
+    public ResponseEntity<List<PostDTO>> getPostsByUser(@RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
         return ResponseEntity.ok(postService.getPostsByUserId(userId));
     }
 
     // Actualizar una publicación
     @PutMapping("/{postId}")
-    public ResponseEntity<PostDTO> updatePost(@PathVariable Long postId, @RequestBody PostUpdateDTO postUpdateDTO) {
+    public ResponseEntity<PostDTO> updatePost(@PathVariable Long postId, @RequestBody PostUpdateDTO postUpdateDTO, @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
+        postUpdateDTO.setUserId(userId); // Set the userId from the token
         return ResponseEntity.ok(postService.updatePost(postId, postUpdateDTO));
     }
 
     // Eliminar una publicación
     @DeleteMapping("/{postId}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
-        postService.deletePost(postId);
+    public ResponseEntity<Void> deletePost(@PathVariable Long postId, @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
+        postService.deletePost(postId, userId);
         return ResponseEntity.noContent().build();
     }
 

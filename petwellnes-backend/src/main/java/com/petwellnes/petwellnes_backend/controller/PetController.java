@@ -22,41 +22,41 @@ public class PetController {
     private JwtService jwtService;
 
     @PostMapping("/create")
-    public ResponseEntity<Pet> createPet(@RequestBody PetDto petDto, HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        Long userId = jwtService.getUserIdFromToken(token);
+    public ResponseEntity<Pet> createPet(@RequestBody PetDto petDto, @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
         Pet newPet = petService.createPet(petDto, userId);
         return ResponseEntity.ok(newPet);
     }
 
     @GetMapping("/selectbyuser")
-    public ResponseEntity<List<Pet>> getPetsByUser(HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        Long userId = jwtService.getUserIdFromToken(token);
+    public ResponseEntity<List<Pet>> getPetsByUser(@RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
         List<Pet> pets = petService.getPetsByUserId(userId);
         return ResponseEntity.ok(pets);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pet> getPetById(@PathVariable Long id, HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        Long userId = jwtService.getUserIdFromToken(token);
+    public ResponseEntity<Pet> getPetById(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
         Pet pet = petService.getPetByIdAndUserId(id, userId);
         return ResponseEntity.ok(pet);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Pet> updatePet(@PathVariable Long id, @RequestBody PetDto petDto, HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        Long userId = jwtService.getUserIdFromToken(token);
+    public ResponseEntity<Pet> updatePet(@PathVariable Long id, @RequestBody PetDto petDto, @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
         Pet updatedPet = petService.updatePet(id, petDto, userId);
         return ResponseEntity.ok(updatedPet);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePet(@PathVariable Long id, HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        Long userId = jwtService.getUserIdFromToken(token);
+    public ResponseEntity<Void> deletePet(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
         petService.deletePet(id, userId);
         return ResponseEntity.noContent().build();
     }

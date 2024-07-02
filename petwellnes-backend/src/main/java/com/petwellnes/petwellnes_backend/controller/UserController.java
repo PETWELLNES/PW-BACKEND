@@ -1,11 +1,13 @@
 package com.petwellnes.petwellnes_backend.controller;
 
 import com.petwellnes.petwellnes_backend.infra.config.security.ChangePasswordRequest;
+import com.petwellnes.petwellnes_backend.infra.config.security.JwtService;
 import com.petwellnes.petwellnes_backend.infra.config.security.LoginRequest;
 import com.petwellnes.petwellnes_backend.infra.config.security.TokenResponse;
 import com.petwellnes.petwellnes_backend.model.dto.userDto.UserDetailsDTO;
 import com.petwellnes.petwellnes_backend.model.dto.userDto.UserRegisterDTO;
 import com.petwellnes.petwellnes_backend.model.dto.userDto.UserUpdateDTO;
+import com.petwellnes.petwellnes_backend.service.PostService;
 import com.petwellnes.petwellnes_backend.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -32,6 +34,8 @@ import java.util.Map;
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserController {
+
+    private final JwtService jwtService;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -96,10 +100,13 @@ public class UserController {
     }
 
     @PostMapping("/upload-profile-image")
-    public ResponseEntity<?> uploadProfileImage(@RequestParam("file") MultipartFile file, @RequestParam("userId") Long userId) {
+    public ResponseEntity<?> uploadProfileImage(@RequestParam("file") MultipartFile file, @RequestHeader("Authorization") String token) {
         if (file.isEmpty() || !file.getContentType().startsWith("image/")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please select an image file");
         }
+
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
 
         try {
             Path directory = Paths.get(uploadPath);
@@ -124,10 +131,13 @@ public class UserController {
     }
 
     @PostMapping("/upload-banner-image")
-    public ResponseEntity<?> uploadBannerImage(@RequestParam("file") MultipartFile file, @RequestParam("userId") Long userId) {
+    public ResponseEntity<?> uploadBannerImage(@RequestParam("file") MultipartFile file, @RequestHeader("Authorization") String token) {
         if (file.isEmpty() || !file.getContentType().startsWith("image/")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please select an image file");
         }
+
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
 
         try {
             Path directory = Paths.get(uploadPath);
@@ -152,15 +162,18 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest, @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
+        changePasswordRequest.setUserId(userId); // Set the userId from the token
+
         try {
             boolean isChanged = userService.changePassword(changePasswordRequest);
+            Map<String, String> response = new HashMap<>();
             if (isChanged) {
-                Map<String, String> response = new HashMap<>();
                 response.put("message", "Contraseña cambiada correctamente");
                 return ResponseEntity.ok(response);
             } else {
-                Map<String, String> response = new HashMap<>();
                 response.put("message", "La contraseña actual es incorrecta");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }

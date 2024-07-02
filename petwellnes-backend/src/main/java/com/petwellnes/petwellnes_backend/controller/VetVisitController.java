@@ -23,42 +23,42 @@ public class VetVisitController {
     private JwtService jwtService;
 
     @PostMapping("/create")
-    public ResponseEntity<VetVisit> createVetVisit(@Valid @RequestBody VetVisitDTO vetVisitDTO, HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        Long userId = jwtService.getUserIdFromToken(token);
+    public ResponseEntity<VetVisit> createVetVisit(@Valid @RequestBody VetVisitDTO vetVisitDTO, @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
         VetVisit newVetVisit = vetVisitService.createVetVisit(vetVisitDTO, userId);
         return ResponseEntity.ok(newVetVisit);
     }
 
     @GetMapping("/pet/{petId}")
-    public ResponseEntity<List<VetVisit>> getAllVetVisitsByPetId(@PathVariable Long petId, HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        Long userId = jwtService.getUserIdFromToken(token);
+    public ResponseEntity<List<VetVisit>> getAllVetVisitsByPetId(@PathVariable Long petId, @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
         List<VetVisit> vetVisits = vetVisitService.getAllVetVisitsByPetId(petId, userId);
         return ResponseEntity.ok(vetVisits);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VetVisit> getVetVisitById(@PathVariable Long id, HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        Long userId = jwtService.getUserIdFromToken(token);
+    public ResponseEntity<VetVisit> getVetVisitById(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
         VetVisit vetVisit = vetVisitService.getVetVisitById(id, userId)
                 .orElseThrow(() -> new RuntimeException("VetVisit not found"));
         return ResponseEntity.ok().body(vetVisit);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VetVisit> updateVetVisit(@PathVariable Long id, @Valid @RequestBody VetVisitDTO vetVisitDTO, HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        Long userId = jwtService.getUserIdFromToken(token);
+    public ResponseEntity<VetVisit> updateVetVisit(@PathVariable Long id, @Valid @RequestBody VetVisitDTO vetVisitDTO, @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
         VetVisit updatedVetVisit = vetVisitService.updateVetVisit(id, vetVisitDTO, userId);
         return ResponseEntity.ok(updatedVetVisit);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteVetVisit(@PathVariable Long id, HttpServletRequest request) {
-        String token = request.getHeader("Authorization").substring(7);
-        Long userId = jwtService.getUserIdFromToken(token);
+    public ResponseEntity<Void> deleteVetVisit(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
         vetVisitService.deleteVetVisit(id, userId);
         return ResponseEntity.noContent().build();
     }

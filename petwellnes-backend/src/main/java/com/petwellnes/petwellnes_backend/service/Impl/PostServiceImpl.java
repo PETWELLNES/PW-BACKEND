@@ -129,9 +129,12 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void deletePost(Long postId) {
+    public void deletePost(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post no encontrado"));
+        if (!post.getUser().getUserId().equals(userId)) {
+            throw new IllegalStateException("Usuario no autorizado para eliminar este post");
+        }
         postRepository.delete(post);
     }
 

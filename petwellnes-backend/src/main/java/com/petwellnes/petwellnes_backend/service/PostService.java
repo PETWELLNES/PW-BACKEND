@@ -16,7 +16,7 @@ public interface PostService {
 
     PostDTO updatePost(Long postId, PostUpdateDTO postUpdateDTO);
 
-    void deletePost(Long postId);
+    void deletePost(Long postId, Long userId);
 
     List<PostDTO> getRecentPosts();
 

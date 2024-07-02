@@ -70,7 +70,11 @@ public class CommentController {
     public ResponseEntity<CommentCreatedResponseDTO> replyToComment(@PathVariable Long postId,
                                                                     @PathVariable Long parentCommentId,
                                                                     @RequestBody CommentCreateDTO createCommentDTO,
-                                                                    @AuthenticationPrincipal User user) {
+                                                                    @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
+        User user = new User();
+        user.setUserId(userId);
         CommentCreatedResponseDTO response = commentService.replyToComment(postId, parentCommentId, createCommentDTO, user);
         return ResponseEntity.ok(response);
     }
