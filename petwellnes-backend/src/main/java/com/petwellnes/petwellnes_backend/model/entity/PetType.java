@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class Topic {
+public class PetType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long topicId;
+    private Long petTypeId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 }
