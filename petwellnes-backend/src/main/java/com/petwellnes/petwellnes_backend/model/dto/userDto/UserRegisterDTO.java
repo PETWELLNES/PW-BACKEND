@@ -14,5 +14,6 @@ public record UserRegisterDTO(
         String email,
         @NotBlank(message = "Debes colocar una contraseña")
         @Length(max = 50)
-        String password) {
+        String password
+) {
 }

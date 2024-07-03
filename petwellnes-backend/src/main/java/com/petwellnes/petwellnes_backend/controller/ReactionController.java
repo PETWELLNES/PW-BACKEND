@@ -25,7 +25,7 @@ public class ReactionController {
     public ResponseEntity<ReactionDTO> addOrUpdateReaction(@RequestBody @Valid ReactionCreateDTO reactionCreateDTO, @RequestHeader("Authorization") String token) {
         String jwtToken = token.substring(7);
         Long userId = jwtService.getUserIdFromToken(jwtToken);
-        reactionCreateDTO.setUserId(userId); // Set the userId from the token
+        reactionCreateDTO.setUserId(userId);
         try {
             ReactionDTO reactionDTO = reactionService.addOrUpdateReaction(reactionCreateDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(reactionDTO);

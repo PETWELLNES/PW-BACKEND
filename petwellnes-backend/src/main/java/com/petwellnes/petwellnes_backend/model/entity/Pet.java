@@ -18,8 +18,8 @@ public class Pet {
     private String species;
     private String breed;
     private Integer age;
-    private String photo; // URL de la foto general
-    private String profilePhoto; // URL de la foto de perfil
+    private String photo;
+    private String profilePhoto;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

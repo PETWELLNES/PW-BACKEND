@@ -12,8 +12,30 @@
       <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/controller/ReactionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/controller/ReactionController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/controller/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/controller/VetVisitController.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/controller/VetVisitController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/config/security/ApplicationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/config/security/ApplicationConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/config/security/ChangePasswordRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/config/security/ChangePasswordRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/config/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/config/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/repository/PetBreedRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/repository/PetBreedRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/repository/PetRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/repository/PetRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/repository/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/repository/PostRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/repository/ReactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/repository/ReactionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/repository/VetVisitRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/infra/repository/VetVisitRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/mapper/PostMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/mapper/PostMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/dto/postDto/PostCreateDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/dto/postDto/PostCreateDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/dto/postDto/PostDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/dto/postDto/PostDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/dto/postDto/PostUpdateDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/dto/postDto/PostUpdateDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/dto/userDto/UserRegisterDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/dto/userDto/UserRegisterDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/entity/Pet.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/entity/Pet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/entity/PetBreed.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/entity/PetBreed.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/entity/PetType.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/entity/PetType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/entity/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/entity/Post.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/entity/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/service/Impl/PostServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/service/Impl/PostServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/service/PetService.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/service/PetService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/service/VetVisitService.java" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/service/VetVisitService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/petwellnes-backend/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,28 +71,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.PetwellnesBackendApplication.executor": "Run",
-    "git-widget-placeholder": "Dev",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/MSI/Desktop/ww/PW-BACKEND/petwellnes-backend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.PetwellnesBackendApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Dev&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/MSI/Desktop/ww/PW-BACKEND/petwellnes-backend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <option name="ENV_FILES" value="" />

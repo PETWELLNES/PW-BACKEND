@@ -23,7 +23,6 @@ public class CommentController {
     private final CommentService commentService;
     private final JwtService jwtService;
 
-    // Crear un comentario
     @PostMapping("/{postId}")
     public ResponseEntity<CommentDTO> createComment(@PathVariable Long postId,
                                                     @RequestBody CommentCreateDTO commentCreateDTO,
@@ -34,14 +33,12 @@ public class CommentController {
         return ResponseEntity.ok(newComment);
     }
 
-    // Obtener comentarios por ID de publicación
     @GetMapping("/post/{postId}")
     public ResponseEntity<List<CommentDTO>> getCommentsByPostId(@PathVariable Long postId) {
         List<CommentDTO> comments = commentService.getCommentsByPostId(postId);
         return ResponseEntity.ok(comments);
     }
 
-    // Actualizar un comentario
     @PutMapping("/{commentId}")
     public ResponseEntity<CommentDTO> updateComment(@PathVariable Long commentId,
                                                     @RequestBody CommentUpdateDTO commentUpdateDTO,
@@ -52,7 +49,6 @@ public class CommentController {
         return ResponseEntity.ok(updatedComment);
     }
 
-    // Eliminar un comentario
     @DeleteMapping("/{commentId}")
     public ResponseEntity<String> deleteComment(@PathVariable Long commentId,
                                                 @RequestHeader("Authorization") String token) {

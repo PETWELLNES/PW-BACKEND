@@ -1,22 +1,32 @@
 package com.petwellnes.petwellnes_backend.service.Impl;
 
-import com.petwellnes.petwellnes_backend.infra.repository.*;
+import com.petwellnes.petwellnes_backend.infra.repository.PetBreedRepository;
+import com.petwellnes.petwellnes_backend.infra.repository.PetTypeRepository;
+import com.petwellnes.petwellnes_backend.infra.repository.PostRepository;
+import com.petwellnes.petwellnes_backend.infra.repository.TopicRepository;
+import com.petwellnes.petwellnes_backend.infra.repository.UserRepository;
 import com.petwellnes.petwellnes_backend.mapper.PostMapper;
 import com.petwellnes.petwellnes_backend.model.dto.postDto.PostCreateDTO;
 import com.petwellnes.petwellnes_backend.model.dto.postDto.PostDTO;
 import com.petwellnes.petwellnes_backend.model.dto.postDto.PostUpdateDTO;
-import com.petwellnes.petwellnes_backend.model.entity.*;
+import com.petwellnes.petwellnes_backend.model.entity.PetBreed;
+import com.petwellnes.petwellnes_backend.model.entity.PetType;
+import com.petwellnes.petwellnes_backend.model.entity.Post;
+import com.petwellnes.petwellnes_backend.model.entity.Topic;
+import com.petwellnes.petwellnes_backend.model.entity.User;
 import com.petwellnes.petwellnes_backend.service.PostService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,10 +44,6 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public PostDTO createPost(PostCreateDTO postCreateDTO) {
-        if (postCreateDTO.getUserId() == null) {
-            throw new IllegalArgumentException("User ID must not be null");
-        }
-
         User user = userRepository.findById(postCreateDTO.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
@@ -50,24 +56,17 @@ public class PostServiceImpl implements PostService {
         Topic topic = topicRepository.findById(postCreateDTO.getTopicId())
                 .orElseThrow(() -> new EntityNotFoundException("Tema no encontrado"));
 
-        logger.info("Creating post with petTypeId: {}, petBreedId: {}, and topicId: {}", petType.getPetTypeId(), petBreed.getPetBreedId(), topic.getId());
+        logger.info("Creating post with petTypeId: {}, petBreedId: {}, and topicId: {}", petType.getPetTypeId(), petBreed.getPetBreedId(), topic.getTopicId());
         if (!petBreed.getPetType().getPetTypeId().equals(petType.getPetTypeId())) {
             throw new IllegalArgumentException("La raza de mascota no corresponde al tipo de mascota.");
         }
 
-        Post post = new Post();
+        Post post = postMapper.convertToEntity(postCreateDTO);
         post.setUser(user);
         post.setPetType(petType);
         post.setPetBreed(petBreed);
         post.setTopic(topic);
-        post.setTitle(postCreateDTO.getTitle());
-        post.setCategory(postCreateDTO.getCategory());
-        post.setImage(postCreateDTO.getImage());
-        post.setVideo(postCreateDTO.getVideo());
-        post.setContent(postCreateDTO.getContent());
-        post.setLink(postCreateDTO.getLink());
-
-        post = postRepository.save(post);
+        postRepository.save(post);
         return postMapper.convertToDTO(post);
     }
 
@@ -87,13 +86,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDTO> getPostsByUserId(Long userId) {
-        return postRepository.findByUserUserId(userId).stream()
-                .map(postMapper::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
     @Transactional
     public PostDTO updatePost(Long postId, PostUpdateDTO postUpdateDTO) {
         Post post = postRepository.findById(postId)
@@ -108,17 +100,13 @@ public class PostServiceImpl implements PostService {
         Topic topic = topicRepository.findById(postUpdateDTO.getTopicId())
                 .orElseThrow(() -> new EntityNotFoundException("Tema no encontrado"));
 
-        logger.info("Updating post with petTypeId: {}, petBreedId: {}, and topicId: {}", petType.getPetTypeId(), petBreed.getPetBreedId(), topic.getId());
+        logger.info("Updating post with petTypeId: {}, petBreedId: {}, and topicId: {}", petType.getPetTypeId(), petBreed.getPetBreedId(), topic.getTopicId());
         if (!petBreed.getPetType().getPetTypeId().equals(petType.getPetTypeId())) {
             throw new IllegalArgumentException("La raza de mascota no corresponde al tipo de mascota.");
         }
 
         post.setTitle(postUpdateDTO.getTitle());
-        post.setCategory(postUpdateDTO.getCategory());
-        post.setImage(postUpdateDTO.getImage());
-        post.setVideo(postUpdateDTO.getVideo());
         post.setContent(postUpdateDTO.getContent());
-        post.setLink(postUpdateDTO.getLink());
         post.setPetType(petType);
         post.setPetBreed(petBreed);
         post.setTopic(topic);
@@ -129,38 +117,55 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional
-    public void deletePost(Long postId, Long userId) {
+    public void deletePost(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post no encontrado"));
-        if (!post.getUser().getUserId().equals(userId)) {
-            throw new IllegalStateException("Usuario no autorizado para eliminar este post");
-        }
         postRepository.delete(post);
     }
 
     @Override
     public List<PostDTO> getRecentPosts() {
         Pageable pageable = PageRequest.of(0, 5);
-        return postRepository.findAllByOrderByCreatedAtDesc(pageable).stream()
+        Page<Post> page = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        return page.getContent().stream()
                 .map(postMapper::convertToDTO)
                 .collect(Collectors.toList());
     }
+
     @Override
-    public List<PostDTO> filterPostsByPetType(String petType) {
-        List<Post> posts = postRepository.findByPetTypeName(petType); // Asegúrate de que este método existe en tu repositorio
-        return posts.stream().map(postMapper::convertToDTO).collect(Collectors.toList());
+    @Transactional
+    public Map<String, List<PostDTO>> getRecentPostsGroupedByType() {
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<Post> page = postRepository.findAllByOrderByCreatedAtDesc(pageable);
+        List<Post> posts = page.getContent();
+
+        return posts.stream()
+                .map(postMapper::convertToDTO)
+                .collect(Collectors.groupingBy(PostDTO::getPetTypeName));
     }
 
     @Override
-    public List<PostDTO> filterPostsByBreed(String breed) {
-        List<Post> posts = postRepository.findByPetBreedName(breed); // Asegúrate de que este método existe en tu repositorio
-        return posts.stream().map(postMapper::convertToDTO).collect(Collectors.toList());
+    public List<PostDTO> getResponsesByParentPostId(Long parentId) {
+        Post parentPost = postRepository.findById(parentId)
+                .orElseThrow(() -> new EntityNotFoundException("Post padre no encontrado"));
+        return postRepository.findByParentPost(parentPost).stream()
+                .map(postMapper::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<PostDTO> filterPostsByPetTypeAndBreed(String petType, String breed) {
-        List<Post> posts = postRepository.findByPetTypeNameAndPetBreedName(petType, breed); // Asegúrate de que este método existe en tu repositorio
-        return posts.stream().map(postMapper::convertToDTO).collect(Collectors.toList());
+    public List<PostDTO> getPostsByAnimalType(Long animalTypeId) {
+        List<Post> posts = postRepository.findByPetType_PetTypeId(animalTypeId);
+        return posts.stream()
+                .map(postMapper::convertToDTO)
+                .collect(Collectors.toList());
     }
 
+    @Override
+    public List<PostDTO> getPostsByUserId(Long userId) {
+        List<Post> posts = postRepository.findByUser_UserId(userId);
+        return posts.stream()
+                .map(postMapper::convertToDTO)
+                .collect(Collectors.toList());
+    }
 }

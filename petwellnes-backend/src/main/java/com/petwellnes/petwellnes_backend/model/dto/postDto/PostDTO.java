@@ -1,36 +1,37 @@
 package com.petwellnes.petwellnes_backend.model.dto.postDto;
 
+import com.petwellnes.petwellnes_backend.model.entity.Post;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.sql.Time;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 public class PostDTO {
     private Long postId;
-    private Date date;
-    private Time time;
-    private String category;
-    private Long userId;
-    private Long topicId;
-    private Long petTypeId;
-    private String image;
-    private String video;
+    private String title;
     private String content;
-    private String link;
-    private int reactions;
-    private Long breedId;
+    private Long userId;
+    private Long petTypeId;
+    private String petTypeName;
+    private Long petBreedId;
+    private String petBreedName;
+    private Long topicId;
+    private String topicName;
+    private LocalDateTime createdAt;
 
-    // Getters and Setters
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public void setTime(Time time) {
-        this.time = time;
-    }
-
-    public void setBreedId(Long breedId) {
-        this.breedId = breedId;
+    public PostDTO(Post post) {
+        this.postId = post.getPostId();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.userId = post.getUser().getUserId();
+        this.petTypeId = post.getPetType().getPetTypeId();
+        this.petTypeName = post.getPetType().getName();
+        this.petBreedId = post.getPetBreed().getPetBreedId();
+        this.petBreedName = post.getPetBreed().getName();
+        this.topicId = post.getTopic().getTopicId();
+        this.topicName = post.getTopic().getName();
+        this.createdAt = post.getCreatedAt();
     }
 }

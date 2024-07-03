@@ -15,7 +15,6 @@ public class PetType {
     @Column(nullable = false)
     private String name;
 
-    // Agregar método setId
     public void setPetTypeId(Long id) {
         this.petTypeId = id;
     }

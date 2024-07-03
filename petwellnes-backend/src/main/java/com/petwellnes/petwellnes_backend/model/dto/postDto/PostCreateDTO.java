@@ -1,17 +1,26 @@
 package com.petwellnes.petwellnes_backend.model.dto.postDto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class PostCreateDTO {
-    private Long userId;
-    private Long petTypeId;
-    private Long petBreedId;
-    private Long topicId;
+    @NotBlank
     private String title;
-    private String category;
-    private String image;
-    private String video;
+
+    @NotBlank
     private String content;
-    private String link;
+
+    @NotNull
+    private Long userId;
+
+    @NotNull
+    private Long petTypeId;
+
+    @NotNull
+    private Long petBreedId;
+
+    @NotNull
+    private Long topicId;
 }

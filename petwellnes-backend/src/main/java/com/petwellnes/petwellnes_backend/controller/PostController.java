@@ -1,97 +1,127 @@
 package com.petwellnes.petwellnes_backend.controller;
 
-import com.petwellnes.petwellnes_backend.infra.config.security.JwtService;
 import com.petwellnes.petwellnes_backend.model.dto.postDto.PostCreateDTO;
 import com.petwellnes.petwellnes_backend.model.dto.postDto.PostDTO;
 import com.petwellnes.petwellnes_backend.model.dto.postDto.PostUpdateDTO;
 import com.petwellnes.petwellnes_backend.service.PostService;
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/posts")
+@RequestMapping("/api/v1/post")
 @RequiredArgsConstructor
 public class PostController {
 
     private final PostService postService;
-    private final JwtService jwtService;
 
-    // Crear una nueva publicación
-    @PostMapping("/create")
-    public ResponseEntity<PostDTO> createPost(@RequestBody PostCreateDTO postCreateDTO, @RequestHeader("Authorization") String token) {
-        String jwtToken = token.substring(7);
-        Long userId = jwtService.getUserIdFromToken(jwtToken);
-        postCreateDTO.setUserId(userId); // Set the userId from the token
-        PostDTO newPost = postService.createPost(postCreateDTO);
-        return ResponseEntity.ok(newPost);
+    @PostMapping
+    public ResponseEntity<PostDTO> createPost(@RequestBody @Valid PostCreateDTO postCreateDTO) {
+        try {
+            PostDTO postDTO = postService.createPost(postCreateDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(postDTO);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
-    // Obtener una publicación por su ID
     @GetMapping("/{postId}")
     public ResponseEntity<PostDTO> getPostById(@PathVariable Long postId) {
-        return ResponseEntity.ok(postService.getPostById(postId));
+        try {
+            PostDTO postDTO = postService.getPostById(postId);
+            return ResponseEntity.ok(postDTO);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
-    // Obtener todas las publicaciones con paginación
     @GetMapping
-    public ResponseEntity<List<PostDTO>> getAllPosts(@RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(postService.getAllPosts(page, size));
+    public ResponseEntity<List<PostDTO>> getAllPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        try {
+            List<PostDTO> posts = postService.getAllPosts(page, size);
+            return ResponseEntity.ok(posts);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
-    // Obtener todas las publicaciones del usuario autenticado
-    @GetMapping("/user")
-    public ResponseEntity<List<PostDTO>> getPostsByUser(@RequestHeader("Authorization") String token) {
-        String jwtToken = token.substring(7);
-        Long userId = jwtService.getUserIdFromToken(jwtToken);
-        return ResponseEntity.ok(postService.getPostsByUserId(userId));
-    }
-
-    // Actualizar una publicación
     @PutMapping("/{postId}")
-    public ResponseEntity<PostDTO> updatePost(@PathVariable Long postId, @RequestBody PostUpdateDTO postUpdateDTO, @RequestHeader("Authorization") String token) {
-        String jwtToken = token.substring(7);
-        Long userId = jwtService.getUserIdFromToken(jwtToken);
-        postUpdateDTO.setUserId(userId); // Set the userId from the token
-        return ResponseEntity.ok(postService.updatePost(postId, postUpdateDTO));
+    public ResponseEntity<PostDTO> updatePost(
+            @PathVariable Long postId,
+            @RequestBody @Valid PostUpdateDTO postUpdateDTO) {
+        try {
+            PostDTO postDTO = postService.updatePost(postId, postUpdateDTO);
+            return ResponseEntity.ok(postDTO);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
-    // Eliminar una publicación
     @DeleteMapping("/{postId}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long postId, @RequestHeader("Authorization") String token) {
-        String jwtToken = token.substring(7);
-        Long userId = jwtService.getUserIdFromToken(jwtToken);
-        postService.deletePost(postId, userId);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
+        try {
+            postService.deletePost(postId);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
-    // Obtener las publicaciones más recientes
     @GetMapping("/recent")
     public ResponseEntity<List<PostDTO>> getRecentPosts() {
-        return ResponseEntity.ok(postService.getRecentPosts());
+        List<PostDTO> recentPosts = postService.getRecentPosts();
+        return ResponseEntity.ok(recentPosts);
     }
 
-    // Filtrar publicaciones por tipo de mascota
-    @GetMapping("/discover/filterByPetType/{petType}")
-    public ResponseEntity<List<PostDTO>> filterByPetType(@PathVariable String petType) {
-        List<PostDTO> posts = postService.filterPostsByPetType(petType); // Filtrar publicaciones por tipo de mascota
-        return ResponseEntity.ok(posts); // Retornar las publicaciones filtradas
+    @GetMapping("/recent-grouped")
+    public ResponseEntity<Map<String, List<PostDTO>>> getRecentPostsGroupedByType() {
+        Map<String, List<PostDTO>> recentPostsGroupedByType = postService.getRecentPostsGroupedByType();
+        return ResponseEntity.ok(recentPostsGroupedByType);
     }
 
-    // Filtrar publicaciones por raza
-    @GetMapping("/discover/filterByBreed/{breed}")
-    public ResponseEntity<List<PostDTO>> filterByBreed(@PathVariable String breed) {
-        List<PostDTO> posts = postService.filterPostsByBreed(breed); // Filtrar publicaciones por raza
-        return ResponseEntity.ok(posts); // Retornar las publicaciones filtradas
+    @GetMapping("/{id}/responses")
+    public ResponseEntity<List<PostDTO>> getResponsesByParentPostId(@PathVariable Long id) {
+        List<PostDTO> responses = postService.getResponsesByParentPostId(id);
+        return ResponseEntity.ok(responses);
     }
 
-    // Filtrar publicaciones por tipo de mascota y raza
-    @GetMapping("/discover/filterByPetTypeAndBreed/{petType}/{breed}")
-    public ResponseEntity<List<PostDTO>> filterByPetTypeAndBreed(@PathVariable String petType, @PathVariable String breed) {
-        List<PostDTO> posts = postService.filterPostsByPetTypeAndBreed(petType, breed); // Filtrar publicaciones por tipo de mascota y raza
-        return ResponseEntity.ok(posts); // Retornar las publicaciones filtradas
+    @GetMapping("/by-animal-type")
+    public ResponseEntity<List<PostDTO>> getPostsByAnimalType(@RequestParam Long animalTypeId) {
+        try {
+            List<PostDTO> posts = postService.getPostsByAnimalType(animalTypeId);
+            return ResponseEntity.ok(posts);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/by-user")
+    public ResponseEntity<List<PostDTO>> getPostsByUserId(@RequestParam Long userId) {
+        try {
+            List<PostDTO> posts = postService.getPostsByUserId(userId);
+            return ResponseEntity.ok(posts);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 }
