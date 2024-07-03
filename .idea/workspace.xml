@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="025d66e4-9ce5-4feb-b834-b717741886fb" name="Changes" comment="" />
+    <list default="true" id="025d66e4-9ce5-4feb-b834-b717741886fb" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/petwellnes-backend/src/main/java/com/petwellnes/petwellnes_backend/model/dto/vetvisitDto/VetVisitCreateDTO.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -76,7 +78,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="JUnit.PostServiceImplTest">
+  <component name="RunManager" selected="JUnit.VetVisitServiceImplTest">
     <configuration name="CommentServiceImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="petwellnes-backend" />
       <extension name="coverage">
@@ -132,6 +134,21 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.petwellnes.petwellnes_backend.service" />
       <option name="MAIN_CLASS_NAME" value="com.petwellnes.petwellnes_backend.service.UserServiceImplTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="VetVisitServiceImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="petwellnes-backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.petwellnes.petwellnes_backend.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.petwellnes.petwellnes_backend.service" />
+      <option name="MAIN_CLASS_NAME" value="com.petwellnes.petwellnes_backend.service.VetVisitServiceImplTest" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -230,6 +247,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.VetVisitServiceImplTest" />
         <item itemvalue="JUnit.PostServiceImplTest" />
         <item itemvalue="JUnit.PetServiceImplTest" />
         <item itemvalue="JUnit.UserServiceImplTest" />

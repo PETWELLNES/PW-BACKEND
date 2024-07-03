@@ -1,6 +1,7 @@
 package com.petwellnes.petwellnes_backend.controller;
 
-import com.petwellnes.petwellnes_backend.model.dto.vetvisitDto.VetVisitDTO;
+import com.petwellnes.petwellnes_backend.model.dto.vetvisitDto.VetVisitCreateDTO;
+import com.petwellnes.petwellnes_backend.model.dto.vetvisitDto.VetVisitUpdateDTO;
 import com.petwellnes.petwellnes_backend.model.entity.VetVisit;
 import com.petwellnes.petwellnes_backend.service.VetVisitService;
 import com.petwellnes.petwellnes_backend.infra.config.security.JwtService;
@@ -24,10 +25,10 @@ public class VetVisitController {
     private JwtService jwtService;
 
     @PostMapping("/create")
-    public ResponseEntity<VetVisit> createVetVisit(@Valid @RequestBody VetVisitDTO vetVisitDTO, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<VetVisit> createVetVisit(@Valid @RequestBody VetVisitCreateDTO vetVisitCreateDTO, @RequestHeader("Authorization") String token) {
         String jwtToken = token.substring(7);
         Long userId = jwtService.getUserIdFromToken(jwtToken);
-        VetVisit newVetVisit = vetVisitService.createVetVisit(vetVisitDTO, userId);
+        VetVisit newVetVisit = vetVisitService.createVetVisit(vetVisitCreateDTO, userId);
         return ResponseEntity.ok(newVetVisit);
     }
 
@@ -49,10 +50,10 @@ public class VetVisitController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VetVisit> updateVetVisit(@PathVariable Long id, @Valid @RequestBody VetVisitDTO vetVisitDTO, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<VetVisit> updateVetVisit(@PathVariable Long id, @Valid @RequestBody VetVisitUpdateDTO vetVisitUpdateDTO, @RequestHeader("Authorization") String token) {
         String jwtToken = token.substring(7);
         Long userId = jwtService.getUserIdFromToken(jwtToken);
-        VetVisit updatedVetVisit = vetVisitService.updateVetVisit(id, vetVisitDTO, userId);
+        VetVisit updatedVetVisit = vetVisitService.updateVetVisit(id, vetVisitUpdateDTO, userId);
         return ResponseEntity.ok(updatedVetVisit);
     }
 

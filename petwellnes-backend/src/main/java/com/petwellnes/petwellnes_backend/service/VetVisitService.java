@@ -1,6 +1,7 @@
 package com.petwellnes.petwellnes_backend.service;
 
-import com.petwellnes.petwellnes_backend.model.dto.vetvisitDto.VetVisitDTO;
+import com.petwellnes.petwellnes_backend.model.dto.vetvisitDto.VetVisitCreateDTO;
+import com.petwellnes.petwellnes_backend.model.dto.vetvisitDto.VetVisitUpdateDTO;
 import com.petwellnes.petwellnes_backend.model.entity.VetVisit;
 
 import java.util.List;
@@ -11,9 +12,9 @@ public interface VetVisitService {
 
     Optional<VetVisit> getVetVisitById(Long id, Long userId);
 
-    VetVisit createVetVisit(VetVisitDTO vetVisitDTO, Long userId);
+    VetVisit createVetVisit(VetVisitCreateDTO vetVisitCreateDTO, Long userId);
 
-    VetVisit updateVetVisit(Long id, VetVisitDTO vetVisitDTO, Long userId);
+    VetVisit updateVetVisit(Long id, VetVisitUpdateDTO vetVisitUpdateDTO, Long userId);
 
     void deleteVetVisit(Long id, Long userId);
 }
