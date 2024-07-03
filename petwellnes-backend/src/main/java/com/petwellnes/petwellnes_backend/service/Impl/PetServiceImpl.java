@@ -5,7 +5,6 @@ import com.petwellnes.petwellnes_backend.infra.repository.PetRepository;
 import com.petwellnes.petwellnes_backend.infra.repository.PetTypeRepository;
 import com.petwellnes.petwellnes_backend.infra.repository.UserRepository;
 import com.petwellnes.petwellnes_backend.model.dto.petDto.PetCreateDTO;
-import com.petwellnes.petwellnes_backend.model.dto.petDto.PetDto;
 import com.petwellnes.petwellnes_backend.model.dto.petDto.PetUpdateDTO;
 import com.petwellnes.petwellnes_backend.model.dto.petTypeDto.PetTypeDTO;
 import com.petwellnes.petwellnes_backend.model.entity.Pet;
@@ -74,6 +73,21 @@ public class PetServiceImpl implements PetService {
         if (petUpdateDTO.getPhoto() != null && !petUpdateDTO.getPhoto().isEmpty()) {
             existingPet.setPhoto(petUpdateDTO.getPhoto());
         }
+
+        return petRepository.save(existingPet);
+    }
+
+    @Override
+    public Pet updatePet(Long id, Pet pet) {
+        Pet existingPet = petRepository.findByIdAndUserId(id, pet.getUser().getUserId())
+                .orElseThrow(() -> new RuntimeException("Pet not found"));
+
+        existingPet.setName(pet.getName());
+        existingPet.setSpecies(pet.getSpecies());
+        existingPet.setBreed(pet.getBreed());
+        existingPet.setAge(pet.getAge());
+        existingPet.setProfilePhoto(pet.getProfilePhoto());
+        existingPet.setPhoto(pet.getPhoto());
 
         return petRepository.save(existingPet);
     }

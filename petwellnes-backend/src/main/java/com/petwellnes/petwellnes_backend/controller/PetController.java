@@ -10,6 +10,7 @@ import com.petwellnes.petwellnes_backend.model.entity.PetBreed;
 import com.petwellnes.petwellnes_backend.service.PetService;
 import com.petwellnes.petwellnes_backend.infra.config.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,6 +60,7 @@ public class PetController {
         List<Pet> pets = petService.getPetsByUserId(userId);
         List<PetDto> petDtos = pets.stream().map(pet -> {
             PetDto dto = new PetDto();
+            dto.setId(pet.getId());
             dto.setName(pet.getName());
             dto.setSpeciesName(pet.getSpecies().getName());
             dto.setBreedName(pet.getBreed().getName());
@@ -80,12 +82,15 @@ public class PetController {
     @PutMapping("/{id}")
     public ResponseEntity<Pet> updatePet(
             @PathVariable Long id,
-            @RequestPart("pet") PetUpdateDTO petUpdateDTO,
+            @RequestPart("pet") String petJson,
             @RequestPart(value = "profilePhoto", required = false) MultipartFile profilePhoto,
             @RequestHeader("Authorization") String token) throws IOException {
 
         String jwtToken = token.substring(7);
         Long userId = jwtService.getUserIdFromToken(jwtToken);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        PetUpdateDTO petUpdateDTO = objectMapper.readValue(petJson, PetUpdateDTO.class);
 
         if (profilePhoto != null && !profilePhoto.isEmpty()) {
             petUpdateDTO.setProfilePhoto(convertToBase64(profilePhoto));
@@ -113,5 +118,27 @@ public class PetController {
     public ResponseEntity<List<PetBreed>> getBreedsByType(@RequestParam Long typeId) {
         List<PetBreed> breeds = petService.getBreedsByType(typeId);
         return ResponseEntity.ok(breeds);
+    }
+
+    @PostMapping("/upload-profile-image")
+    public ResponseEntity<String> uploadProfileImage(
+            @RequestPart("file") MultipartFile file,
+            @RequestParam("petId") Long petId,
+            @RequestHeader("Authorization") String token) throws IOException {
+
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
+
+        Pet pet = petService.getPetByIdAndUserId(petId, userId);
+        if (pet == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pet not found");
+        }
+
+        String profilePhoto = java.util.Base64.getEncoder().encodeToString(file.getBytes());
+        pet.setProfilePhoto(profilePhoto);
+
+        petService.updatePet(petId, pet);
+
+        return ResponseEntity.ok(profilePhoto);
     }
 }
