@@ -10,5 +10,6 @@ import java.util.List;
 @Repository
 public interface PetBreedRepository extends JpaRepository<PetBreed, Long> {
     List<PetBreed> findByPetType_PetTypeId(Long typeId);
+
     boolean existsByNameAndPetType(String name, PetType petType);
 }

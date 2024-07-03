@@ -14,4 +14,8 @@ public class PetType {
 
     @Column(nullable = false)
     private String name;
+
+    public void setPetTypeId(Long id) {
+        this.petTypeId = id;
+    }
 }

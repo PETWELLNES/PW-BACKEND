@@ -1,5 +1,6 @@
 package com.petwellnes.petwellnes_backend.controller;
 
+import com.petwellnes.petwellnes_backend.infra.config.security.JwtService;
 import com.petwellnes.petwellnes_backend.model.dto.reactionDTO.ReactionCreateDTO;
 import com.petwellnes.petwellnes_backend.model.dto.reactionDTO.ReactionDTO;
 import com.petwellnes.petwellnes_backend.service.ReactionService;
@@ -18,9 +19,13 @@ import java.util.List;
 public class ReactionController {
 
     private final ReactionService reactionService;
+    private final JwtService jwtService;
 
     @PostMapping
-    public ResponseEntity<ReactionDTO> addOrUpdateReaction(@RequestBody @Valid ReactionCreateDTO reactionCreateDTO) {
+    public ResponseEntity<ReactionDTO> addOrUpdateReaction(@RequestBody @Valid ReactionCreateDTO reactionCreateDTO, @RequestHeader("Authorization") String token) {
+        String jwtToken = token.substring(7);
+        Long userId = jwtService.getUserIdFromToken(jwtToken);
+        reactionCreateDTO.setUserId(userId);
         try {
             ReactionDTO reactionDTO = reactionService.addOrUpdateReaction(reactionCreateDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(reactionDTO);

@@ -31,8 +31,6 @@ public class UserServiceImpl implements UserService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private static final String DEFAULT_PROFILE_IMAGE_URL = "default-profile.png";
-    private static final String DEFAULT_BANNER_URL = "default-banner.png";
 
     @Override
     public TokenResponse login(LoginRequest loginRequest) {
@@ -46,7 +44,7 @@ public class UserServiceImpl implements UserService {
             User user = userRepository.findByUsername(loginRequest.getUsername())
                     .orElseThrow(() -> new UsernameNotFoundException("El siguiente username es incorrecto o no existe :" + loginRequest.getUsername()));
 
-            String token = jwtService.getToken(userDetails, user);
+            String token = jwtService.generateToken(userDetails, user);
             return TokenResponse.builder()
                     .token(token)
                     .userId(user.getUserId())
@@ -69,7 +67,7 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
 
-        String token = jwtService.getToken(user, user);
+        String token = jwtService.generateToken(user, user);
         return TokenResponse.builder()
                 .token(token)
                 .userId(user.getUserId())
