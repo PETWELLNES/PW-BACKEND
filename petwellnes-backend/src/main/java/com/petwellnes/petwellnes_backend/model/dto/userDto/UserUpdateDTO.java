@@ -13,6 +13,7 @@ public record UserUpdateDTO(
         String country,
         String password,
         String profileImageUrl,
-        String bannerUrl
+        String bannerUrl,
+        String description
 ) {
 }

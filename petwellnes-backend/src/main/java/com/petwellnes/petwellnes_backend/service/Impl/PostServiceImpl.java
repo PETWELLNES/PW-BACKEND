@@ -168,4 +168,12 @@ public class PostServiceImpl implements PostService {
                 .map(postMapper::convertToDTO)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<PostDTO> getPostsByBreed(Long breedId) {
+        List<Post> posts = postRepository.findByPetBreed_PetBreedId(breedId);
+        return posts.stream()
+                .map(postMapper::convertToDTO)
+                .collect(Collectors.toList());
+    }
 }

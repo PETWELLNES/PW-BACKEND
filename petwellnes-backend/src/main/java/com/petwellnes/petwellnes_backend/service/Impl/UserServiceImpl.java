@@ -114,6 +114,7 @@ public class UserServiceImpl implements UserService {
         user.setCountry(userUpdateDTO.country());
         user.setProfileImageUrl(userUpdateDTO.profileImageUrl());
         user.setBannerUrl(userUpdateDTO.bannerUrl());
+        user.setDescription(userUpdateDTO.description());
         if (userUpdateDTO.password() != null && !userUpdateDTO.password().isEmpty()) {
             user.setPassword(passwordEncoder.encode(userUpdateDTO.password()));
         }

@@ -16,9 +16,10 @@ public record UserDetailsDTO(
         String country,
         LocalDate registerday,
         String profileImageUrl,
-        String bannerUrl
+        String bannerUrl,
+        String description
 ) {
     public UserDetailsDTO(User user) {
-        this(user.getUserId(), user.getUsername(), user.getName(), user.getLastname(), user.getEmail(), user.getPhone(), user.getWork(), user.getBirthday(), user.getCountry(), user.getRegisterday(), user.getProfileImageUrl(), user.getBannerUrl());
+        this(user.getUserId(), user.getUsername(), user.getName(), user.getLastname(), user.getEmail(), user.getPhone(), user.getWork(), user.getBirthday(), user.getCountry(), user.getRegisterday(), user.getProfileImageUrl(), user.getBannerUrl(), user.getDescription());
     }
 }

@@ -124,4 +124,15 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @GetMapping("/by-breed")
+    public ResponseEntity<List<PostDTO>> getPostsByBreed(@RequestParam Long breedId) {
+        try {
+            List<PostDTO> posts = postService.getPostsByBreed(breedId);
+            return ResponseEntity.ok(posts);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }
