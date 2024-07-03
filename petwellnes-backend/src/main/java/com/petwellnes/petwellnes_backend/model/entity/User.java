@@ -34,6 +34,7 @@ public class User implements UserDetails {
     private String profileImageUrl;
     private String bannerUrl;
     private boolean enabled = true;
+    private String description;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -15,10 +15,20 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String species;
-    private String breed;
     private Integer age;
+
+    @ManyToOne
+    @JoinColumn(name = "species_id")
+    private PetType species;
+
+    @ManyToOne
+    @JoinColumn(name = "breed_id")
+    private PetBreed breed;
+
+    @Column(columnDefinition = "TEXT")
     private String photo;
+
+    @Column(columnDefinition = "TEXT")
     private String profilePhoto;
 
     @ManyToOne(fetch = FetchType.LAZY)

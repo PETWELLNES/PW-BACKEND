@@ -37,6 +37,9 @@ public class PetBreedController {
 
     @GetMapping("/by-type")
     public ResponseEntity<List<PetBreed>> getBreedsByType(@RequestParam Long typeId) {
+        if (typeId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
         List<PetBreed> petBreeds = petBreedService.getBreedsByType(typeId);
         return ResponseEntity.ok(petBreeds);
     }

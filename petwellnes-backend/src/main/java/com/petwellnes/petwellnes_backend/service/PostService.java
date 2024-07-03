@@ -28,4 +28,6 @@ public interface PostService {
     List<PostDTO> getPostsByAnimalType(Long animalTypeId);
 
     List<PostDTO> getPostsByUserId(Long userId);
+
+    List<PostDTO> getPostsByBreed(Long breedId);
 }

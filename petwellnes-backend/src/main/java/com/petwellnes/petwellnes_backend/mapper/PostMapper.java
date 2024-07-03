@@ -26,6 +26,10 @@ public class PostMapper {
     PropertyMap<Post, PostDTO> postToPostDTOMap = new PropertyMap<Post, PostDTO>() {
         protected void configure() {
             map().setPostId(source.getPostId());
+            map().setPetBreedId(source.getPetBreed().getPetBreedId());
+            map().setPetTypeId(source.getPetType().getPetTypeId());
+            map().setUserId(source.getUser().getUserId());
+            map().setTopicId(source.getTopic().getTopicId());
         }
     };
 

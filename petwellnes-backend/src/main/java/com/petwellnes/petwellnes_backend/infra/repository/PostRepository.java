@@ -20,4 +20,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByPetType(PetType petType);
 
     List<Post> findByUser_UserId(Long userId);
+
+    List<Post> findByPetBreed_PetBreedId(Long petBreedId);
 }

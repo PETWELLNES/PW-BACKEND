@@ -9,12 +9,12 @@ import lombok.Data;
 public class Topic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long topicId;
 
     @Column(nullable = false)
     private String name;
 
     public Long getTopicId() {
-        return id;
+        return topicId;
     }
 }

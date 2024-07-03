@@ -1,16 +1,22 @@
 package com.petwellnes.petwellnes_backend.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.petwellnes.petwellnes_backend.model.dto.petDto.PetCreateDTO;
 import com.petwellnes.petwellnes_backend.model.dto.petDto.PetDto;
+import com.petwellnes.petwellnes_backend.model.dto.petDto.PetUpdateDTO;
+import com.petwellnes.petwellnes_backend.model.dto.petTypeDto.PetTypeDTO;
 import com.petwellnes.petwellnes_backend.model.entity.Pet;
+import com.petwellnes.petwellnes_backend.model.entity.PetBreed;
 import com.petwellnes.petwellnes_backend.service.PetService;
 import com.petwellnes.petwellnes_backend.infra.config.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.servlet.http.HttpServletRequest;
-
+import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/pets")
@@ -23,19 +29,44 @@ public class PetController {
     private JwtService jwtService;
 
     @PostMapping("/create")
-    public ResponseEntity<Pet> createPet(@RequestBody PetDto petDto, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Pet> createPet(
+            @RequestPart("pet") String petJson,
+            @RequestPart(value = "profilePhoto", required = false) MultipartFile profilePhoto,
+            @RequestHeader("Authorization") String token) throws IOException {
+
         String jwtToken = token.substring(7);
         Long userId = jwtService.getUserIdFromToken(jwtToken);
-        Pet newPet = petService.createPet(petDto, userId);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        PetCreateDTO petCreateDTO = objectMapper.readValue(petJson, PetCreateDTO.class);
+
+        if (profilePhoto != null && !profilePhoto.isEmpty()) {
+            petCreateDTO.setProfilePhoto(convertToBase64(profilePhoto));
+        }
+
+        Pet newPet = petService.createPet(petCreateDTO, userId);
         return ResponseEntity.ok(newPet);
     }
 
+    private String convertToBase64(MultipartFile file) throws IOException {
+        return java.util.Base64.getEncoder().encodeToString(file.getBytes());
+    }
+
     @GetMapping("/selectbyuser")
-    public ResponseEntity<List<Pet>> getPetsByUser(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<List<PetDto>> getPetsByUser(@RequestHeader("Authorization") String token) {
         String jwtToken = token.substring(7);
         Long userId = jwtService.getUserIdFromToken(jwtToken);
         List<Pet> pets = petService.getPetsByUserId(userId);
-        return ResponseEntity.ok(pets);
+        List<PetDto> petDtos = pets.stream().map(pet -> {
+            PetDto dto = new PetDto();
+            dto.setName(pet.getName());
+            dto.setSpeciesName(pet.getSpecies().getName());
+            dto.setBreedName(pet.getBreed().getName());
+            dto.setAge(pet.getAge());
+            dto.setProfilePhoto(pet.getProfilePhoto());
+            return dto;
+        }).collect(Collectors.toList());
+        return ResponseEntity.ok(petDtos);
     }
 
     @GetMapping("/{id}")
@@ -47,10 +78,20 @@ public class PetController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Pet> updatePet(@PathVariable Long id, @RequestBody PetDto petDto, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Pet> updatePet(
+            @PathVariable Long id,
+            @RequestPart("pet") PetUpdateDTO petUpdateDTO,
+            @RequestPart(value = "profilePhoto", required = false) MultipartFile profilePhoto,
+            @RequestHeader("Authorization") String token) throws IOException {
+
         String jwtToken = token.substring(7);
         Long userId = jwtService.getUserIdFromToken(jwtToken);
-        Pet updatedPet = petService.updatePet(id, petDto, userId);
+
+        if (profilePhoto != null && !profilePhoto.isEmpty()) {
+            petUpdateDTO.setProfilePhoto(convertToBase64(profilePhoto));
+        }
+
+        Pet updatedPet = petService.updatePet(id, petUpdateDTO, userId);
         return ResponseEntity.ok(updatedPet);
     }
 
@@ -60,5 +101,17 @@ public class PetController {
         Long userId = jwtService.getUserIdFromToken(jwtToken);
         petService.deletePet(id, userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/pet-type")
+    public ResponseEntity<List<PetTypeDTO>> getAnimalTypes() {
+        List<PetTypeDTO> petTypes = petService.getAllPetTypes();
+        return ResponseEntity.ok(petTypes);
+    }
+
+    @GetMapping("/pet-breed/by-type")
+    public ResponseEntity<List<PetBreed>> getBreedsByType(@RequestParam Long typeId) {
+        List<PetBreed> breeds = petService.getBreedsByType(typeId);
+        return ResponseEntity.ok(breeds);
     }
 }

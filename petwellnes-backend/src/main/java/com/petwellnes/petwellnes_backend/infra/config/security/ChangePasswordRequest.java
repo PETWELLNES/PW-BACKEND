@@ -4,6 +4,15 @@ public class ChangePasswordRequest {
     private String currentPassword;
     private String newPassword;
 
+    // Default constructor
+    public ChangePasswordRequest() {}
+
+    // Constructor with parameters
+    public ChangePasswordRequest(String currentPassword, String newPassword) {
+        this.currentPassword = currentPassword;
+        this.newPassword = newPassword;
+    }
+
     public String getCurrentPassword() {
         return currentPassword;
     }
