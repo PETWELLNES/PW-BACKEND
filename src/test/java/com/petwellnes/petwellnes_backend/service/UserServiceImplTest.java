@@ -100,31 +100,4 @@ class UserServiceImplTest {
         assertEquals(1L, userDetails.userId());
     }
 
-
-    @Test
-    void updateUserProfileImage_Success() {
-        User user = new User();
-        user.setUserId(1L);
-
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
-        userService.updateUserProfileImage(1L, "newProfileUrl");
-
-        verify(userRepository, times(1)).save(user);
-        assertEquals("newProfileUrl", user.getProfileImageUrl());
-    }
-
-    @Test
-    void updateUserBannerImage_Success() {
-        User user = new User();
-        user.setUserId(1L);
-
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
-        userService.updateUserBannerImage(1L, "newBannerUrl");
-
-        verify(userRepository, times(1)).save(user);
-        assertEquals("newBannerUrl", user.getBannerUrl());
-    }
-
 }

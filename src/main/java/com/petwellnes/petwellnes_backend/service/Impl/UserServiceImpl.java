@@ -112,8 +112,6 @@ public class UserServiceImpl implements UserService {
         user.setWork(userUpdateDTO.work());
         user.setBirthday(userUpdateDTO.birthday());
         user.setCountry(userUpdateDTO.country());
-        user.setProfileImageUrl(userUpdateDTO.profileImageUrl());
-        user.setBannerUrl(userUpdateDTO.bannerUrl());
         user.setDescription(userUpdateDTO.description());
         if (userUpdateDTO.password() != null && !userUpdateDTO.password().isEmpty()) {
             user.setPassword(passwordEncoder.encode(userUpdateDTO.password()));
@@ -124,28 +122,10 @@ public class UserServiceImpl implements UserService {
         return new UserDetailsDTO(user);
     }
 
-    @Override
-    public void updateUserProfileImage(Long userId, String imageUrl) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
-
-        user.setProfileImageUrl(imageUrl);
-        userRepository.save(user);
-    }
-
     private void UserValidate(User user) {
         if (user.getUsername() == null || user.getUsername().isEmpty()) {
             throw new UsernameNotFoundException("El username no puede ser vacío");
         }
-    }
-
-    @Override
-    public void updateUserBannerImage(Long userId, String imageUrl) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
-
-        user.setBannerUrl(imageUrl);
-        userRepository.save(user);
     }
 
     @Override
