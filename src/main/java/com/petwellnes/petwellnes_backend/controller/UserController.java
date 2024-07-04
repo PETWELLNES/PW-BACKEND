@@ -18,7 +18,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,9 +26,6 @@ import java.util.Map;
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserController {
-
-    @Value("${upload.path}")
-    private String uploadPath;
 
     @Autowired
     private UserService userService;
